@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas Lab PCG - Nube</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWelMZbAqlY77RtxYcufTbnLsi70IuGCc",
+            authDomain: "reservas-pcg-30db2.firebaseapp.com",
+            databaseURL: "https://reservas-pcg-30db2-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "reservas-pcg-30db2",
+            storageBucket: "reservas-pcg-30db2.firebasestorage.app",
+            messagingSenderId: "147236988055",
+            appId: "1:147236988055:web:9297649d0ce445c6ffb5d2"
+        };
+
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getDatabase(firebaseApp);
+        window.db = db;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.dbOnValue = onValue;
+        window.dbRemove = remove;
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    boxShadow: {
+                        'glass': '0 4px 30px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .smooth-transition { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .cal-grid { display: grid; grid-template-columns: 80px repeat(7, minmax(140px, 1fr)); border-top: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0; min-width: 1060px; }
+        .cal-cell { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; }
+        .weekend-bg { background-color: #f1f5f9; }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-enter { animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col font-sans overflow-hidden">
+
+    <header class="flex-none h-20 bg-white border-b border-slate-200 z-30 relative px-4 md:px-8 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center justify-center py-2">
+                <svg viewBox="0 0 100 100" class="h-14 w-auto mr-5 drop-shadow-sm hover:scale-105 smooth-transition" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round">
+                        <polygon points="50,35 63,42.5 63,57.5 50,65 37,57.5 37,42.5" fill="#b02128" />
+                        <polygon points="50,5 63,12.5 63,27.5 50,35 37,27.5 37,12.5" fill="#cbd5e1" />
+                        <polygon points="76,20 89,27.5 89,42.5 76,50 63,42.5 63,27.5" fill="#b02128" />
+                        <polygon points="76,50 89,57.5 89,72.5 76,80 63,72.5 63,57.5" fill="#b02128" />
+                        <polygon points="50,65 63,72.5 63,87.5 50,95 37,87.5 37,72.5" fill="#cbd5e1" />
+                        <polygon points="24,50 37,57.5 37,72.5 24,80 11,72.5 11,57.5" fill="#b02128" />
+                        <polygon points="24,20 37,27.5 37,42.5 24,50 11,42.5 11,27.5" fill="#cbd5e1" />
+                    </g>
+                </svg>
+
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col justify-center">
+                        <h1 class="font-black tracking-tight text-xl md:text-3xl leading-none uppercase drop-shadow-sm" style="color: #b02128;">Polymer Composite Group</h1>
+                        <span class="text-[10px] md:text-[12px] font-bold text-slate-500 uppercase tracking-widest leading-none mt-1.5">Nube - Plataforma de Reservas Cloud</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button onclick="app.openNormativa()" class="px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-slate-200 shadow-sm active:scale-95">
+                <i class="fa-solid fa-book-open text-blue-600"></i> <span class="hidden sm:inline">Normativa</span>
+            </button>
+            <button onclick="app.openUserModal()" class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-blue-200 shadow-sm active:scale-95">
+                <i class="fa-solid fa-circle-user"></i> <span id="headerUserName">Identificarse</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 relative overflow-hidden flex flex-col">
+        <div id="dashboardView" class="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth relative">
+            <div class="max-w-[1400px] mx-auto space-y-12 relative z-10" id="categoriesContainer"></div>
+        </div>
+
+        <div id="calendarView" class="hidden flex-1 flex flex-col bg-[#f8fafc] overflow-hidden absolute inset-0 z-20">
+            <div class="flex-none px-4 md:px-6 py-6 md:py-8 bg-white border-b border-slate-200 shadow-sm">
+                <div class="max-w-[1500px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex items-start gap-4 md:gap-5">
+                        <button onclick="app.showDashboard()" class="mt-0.5 flex-none flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 smooth-transition shadow-sm">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm border bg-white" id="calEqIconBox">
+                                    <i id="calEqIcon" class="fa-solid fa-desktop"></i>
+                                </div>
+                                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight" id="calEqTitle">Nombre</h2>
+                                <span class="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-widest bg-slate-100 text-slate-500 border border-slate-200 hidden sm:block" id="calEqBadge">Categoría</span>
+                            </div>
+                            <p class="text-sm text-slate-500 font-medium ml-11 hidden sm:block" id="calEqDesc">Descripción.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200 shadow-sm self-start md:self-auto">
+                        <button onclick="app.changeWeek(-1)" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm text-slate-600 smooth-transition border border-transparent hover:border-slate-200 active:scale-95"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="px-3 text-[13px] font-black text-slate-800 capitalize w-48 text-center flex flex-col leading-none">
+                            <span id="calMonthTxt" class="text-base uppercase tracking-wide">Octubre 2026</span>
+                        </div>
+                        <button onclick="app.changeWeek(1)" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm text-slate-600 smooth-transition border border-transparent hover:border-slate-200 active:scale-95"><i class="fa-solid fa-chevron-right"></i></button>
+                        <div class="w-px h-6 bg-slate-300 mx-1"></div>
+                        <button onclick="app.goToToday()" class="px-4 py-2 text-[11px] font-bold uppercase tracking-wider bg-white rounded-lg border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 shadow-sm smooth-transition active:scale-95">Hoy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-auto p-4 md:p-6">
+                <div class="w-full max-w-[1500px] mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto flex flex-col h-full">
+                    <div class="cal-grid bg-slate-50 text-[11px] font-black text-slate-600 uppercase tracking-widest sticky top-0 z-20 shadow-sm" id="calGridHeader">
+                        <div class="cal-cell py-4 text-center border-b-2 border-slate-200 bg-white sticky left-0 z-30 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">Hora</div>
+                    </div>
+                    <div id="calendarBody" class="flex-1 overflow-y-auto min-w-[1060px]"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="userModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition" id="userContent">
+            
+            <div id="loginFormView" class="hidden">
+                <div class="px-6 py-6 border-b border-slate-100 bg-blue-50 text-center relative">
+                    <button onclick="app.closeUserModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-blue-400 hover:bg-blue-100 hover:text-blue-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-blue-500 text-3xl border border-blue-100">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900">Identificación Cloud</h3>
+                    <p class="text-xs text-slate-500 mt-1 font-medium">Introduce tu nombre y PIN para operar.</p>
+                </div>
+                <form onsubmit="app.saveUser(event)" class="p-6">
+                    <div id="loginError" class="hidden mb-4 p-3 bg-red-50 text-red-600 text-[12px] font-bold rounded-lg border border-red-200 text-center"></div>
+                    
+                    <label class="block text-[12px] font-bold text-slate-800 mb-1.5">Nombre Completo <span class="text-red-500">*</span></label>
+                    <input type="text" id="setupUserName" required class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition mb-4" placeholder="Ej. Ana García">
+                    
+                    <label class="block text-[12px] font-bold text-slate-800 mb-1.5">PIN de Seguridad (4 dígitos) <span class="text-red-500">*</span></label>
+                    <input type="password" id="setupUserPin" required pattern="[0-9]{4}" maxlength="4" class="w-full px-4 py-3 text-center tracking-[0.5em] bg-white border border-slate-300 rounded-xl text-xl font-black text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition mb-6" placeholder="••••">
+                    
+                    <button type="submit" class="w-full px-5 py-3 text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 shadow-md active:scale-95 smooth-transition flex justify-center items-center gap-2">
+                        Acceder <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div id="profileFormView" class="hidden">
+                <div class="px-6 py-8 border-b border-slate-100 bg-teal-50 text-center relative">
+                    <button onclick="app.closeUserModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-teal-400 hover:bg-teal-100 hover:text-teal-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-teal-500 text-4xl border border-teal-100">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <span class="px-3 py-1 bg-teal-100 text-teal-700 text-[10px] font-bold uppercase tracking-widest rounded-full mb-2 inline-block">Sesión Activa</span>
+                    <h3 class="text-2xl font-black text-slate-900 truncate px-2" id="profileUserName">Nombre</h3>
+                </div>
+                <div class="p-6 flex flex-col gap-3">
+                    <button onclick="app.logout()" class="w-full px-5 py-3.5 text-sm font-bold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md active:scale-95 smooth-transition flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-power-off"></i> Cerrar Sesión
+                    </button>
+                    <button onclick="app.closeUserModal()" class="w-full px-5 py-3 text-sm font-bold rounded-xl text-slate-600 bg-slate-100 hover:bg-slate-200 active:scale-95 smooth-transition">
+                        Volver al Calendario
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-95 opacity-0 smooth-transition" id="modalContent">
+            
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                    <h3 class="text-lg font-black text-slate-900">Nueva Reserva</h3>
+                    <p class="text-xs font-bold text-blue-600 uppercase tracking-wide mt-0.5" id="formEqName">Equipo</p>
+                </div>
+                <button onclick="app.closeModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="resForm" onsubmit="app.submitReservation(event)" class="p-6 max-h-[75vh] overflow-y-auto">
+                <div id="formError" class="hidden mb-5 p-3 bg-red-50 text-red-600 text-[12px] font-bold rounded-lg border border-red-200 flex items-center gap-2"></div>
+
+                <div class="mb-5 bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-3 pl-2 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days"></i> Periodo de Reserva</p>
+                    
+                    <div class="flex flex-col gap-4 pl-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-[11px] font-black text-slate-400 w-12 uppercase">Inicio</span>
+                            <div class="flex-1 flex gap-2">
+                                <div class="px-3 py-2 bg-slate-50 border border-slate-200 rounded text-xs font-bold text-slate-700 flex-1 truncate" id="summaryStartDateText">Fecha</div>
+                                <div class="px-3 py-2 bg-slate-50 border border-slate-200 rounded text-xs font-bold text-slate-700 w-20 text-center" id="summaryStartHourText">00:00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <span class="text-[11px] font-black text-slate-400 w-12 uppercase">Fin</span>
+                            <div class="flex-1 flex gap-2">
+                                <input type="date" id="summaryDateEnd" class="px-2 py-1.5 bg-white border border-blue-300 rounded text-xs font-bold text-slate-900 flex-1 cursor-pointer outline-none focus:ring-2 focus:ring-blue-100 smooth-transition" onchange="app.updateEndHours()">
+                                <select id="summaryHourEnd" class="px-2 py-1.5 bg-white border border-blue-300 rounded text-xs font-bold text-slate-900 w-24 cursor-pointer outline-none focus:ring-2 focus:ring-blue-100 smooth-transition"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-[12px] font-bold text-slate-800 mb-1.5">Investigador (Sesión Activa)</label>
+                    <input type="text" id="formUserName" required readonly class="w-full px-3 py-2.5 bg-slate-100 border border-slate-300 rounded-lg text-sm font-bold text-slate-500 cursor-not-allowed">
+                </div>
+
+                <div class="space-y-4" id="dynamicFormContainer"></div>
+
+                <div class="mt-5 pt-4 border-t border-slate-100">
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Observaciones</label>
+                    <textarea id="formNotes" rows="2" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-50" placeholder="Ej. Dejando enfriar..."></textarea>
+                </div>
+                
+                <div class="mt-8 flex gap-3 justify-end">
+                    <button type="button" onclick="app.closeModal()" class="px-4 py-2.5 text-sm font-bold rounded-lg text-slate-500 hover:bg-slate-100 smooth-transition">Cancelar</button>
+                    <button type="submit" id="btnSubmit" class="px-6 py-2.5 text-sm font-bold rounded-lg text-white bg-blue-600 shadow-md hover:bg-blue-700 smooth-transition active:scale-95">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition p-6 text-center" id="confirmContent">
+            <div class="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-2xl border border-red-100"><i class="fa-solid fa-trash-can"></i></div>
+            <h3 class="text-lg font-black text-slate-900 mb-2">¿Eliminar reserva?</h3>
+            <p id="confirmMsg" class="text-[13px] text-slate-500 mb-6 font-medium">Esta reserva pertenece a una serie.</p>
+            <div class="flex flex-col gap-2">
+                <button id="confirmBtnSingle" class="w-full px-5 py-2.5 text-sm font-bold rounded-lg text-white bg-slate-800 hover:bg-slate-900 shadow-md active:scale-95 smooth-transition">Borrar solo esta franja</button>
+                <button id="confirmBtnAll" class="w-full px-5 py-2.5 text-sm font-bold rounded-lg text-white bg-red-500 hover:bg-red-600 shadow-md active:scale-95 smooth-transition hidden">Borrar TODA la serie completa</button>
+                <button onclick="app.closeConfirm()" class="w-full px-5 py-2.5 text-sm font-bold rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 active:scale-95 smooth-transition mt-1">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition flex flex-col" id="viewContent">
+            <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                    <h3 class="text-base font-black text-slate-900" id="viewUser">Nombre</h3>
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-0.5" id="viewEq">Equipo</p>
+                </div>
+                <button onclick="app.closeView()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 max-h-[60vh] overflow-y-auto">
+                <div class="flex items-center gap-2 mb-4 text-sm font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
+                    <i class="fa-regular fa-calendar-check"></i> <span id="viewDate">Fecha y Hora</span>
+                </div>
+                <div id="viewDetails" class="space-y-1"></div>
+            </div>
+            <div class="px-5 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3" id="viewFooter"></div>
+        </div>
+    </div>
+
+    <div id="normativaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform scale-95 opacity-0 smooth-transition" id="normativaContent">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-black text-slate-900 uppercase tracking-wide flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-blue-600"></i> Normativa General del Laboratorio (PCG)</h3>
+                <button onclick="app.closeNormativa()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 space-y-6 text-sm text-slate-700 max-h-[65vh] overflow-y-auto leading-relaxed">
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base"><i class="fa-solid fa-desktop mr-2 text-blue-600"></i>I. Protocolo de Reservas y Uso de Equipos</h4>
+                    <p><strong>1.1. Identidad intransferible:</strong> El acceso a la plataforma requiere identificación con PIN personal. Queda terminantemente prohibido realizar reservas utilizando cuentas de terceros o suplantar la identidad de otro investigador.</p>
+                    <p><strong>1.2. Optimización del tiempo:</strong> Si un ensayo o ciclo térmico finaliza antes de lo previsto, es obligatorio liberar las franjas horarias reservadas restantes para permitir el acceso a otros compañeros del grupo.</p>
+                    <p><strong>1.3. Antelación y cancelación:</strong> Las reservas deben ajustarse estrictamente al tiempo real estimado de preparación y medida. Los bloques fantasma sin uso justificado serán cancelados por los responsables del laboratorio.</p>
+                </div>
+                
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-shield-halved mr-2 text-blue-600"></i>II. Normas de Seguridad y Equipos de Protección (EPIs)</h4>
+                    <p><strong>2.1. Indumentaria obligatoria:</strong> Es obligatorio el uso de bata de laboratorio abrochada, gafas de seguridad homologadas y calzado cerrado en todo el recinto del laboratorio.</p>
+                    <p><strong>2.2. Protección térmica y criogénica:</strong> Para el manejo de muflas, hornos tubulares y estufas a altas temperaturas, es obligatorio el uso de guantes térmicos. Para la manipulación de nitrógeno líquido en la criomolienda, se deben emplear guantes criogénicos y pantalla facial.</p>
+                    <p><strong>2.3. Emisión de gases y campanas:</strong> Cualquier manipulación de disolventes orgánicos, resinas epoxi o polímeros que emitan vapores debe realizarse exclusivamente bajo las campanas de extracción (Campana 027, 101, 102 o Quesera) con el sistema de extracción encendido.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-fire mr-2 text-blue-600"></i>III. Ensayos Nocturnos y Fines de Semana</h4>
+                    <p><strong>3.1. Autorización de ciclos largos:</strong> Los equipos operados en ciclos largos continuos (estufas, muflas, ensayos de tracción prolongados) que abarquen noches o fines de semana deben estar debidamente planificados en el calendario cloud.</p>
+                    <p><strong>3.2. Cartelería obligatoria:</strong> Todo equipo dejado en funcionamiento sin supervisión presencial directa debe contar con un cartel visible junto al panel que indique: <em>Nombre del investigador, teléfono de contacto, tipo de muestra, temperatura/régimen y hora prevista de finalización</em>.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-triangle-exclamation mr-2 text-blue-600"></i>IV. Mantenimiento, Limpieza y Averías</h4>
+                    <p><strong>4.1. Limpieza rigurosa:</strong> Al finalizar la sesión, el puesto de trabajo, balanzas y accesorios deben quedar perfectamente limpios y libres de restos de polímeros o fibras.</p>
+                    <p><strong>4.2. Notificación de incidencias:</strong> Cualquier anomalía, ruido extraño, fallo de temperatura o error en los equipos debe notificarse inmediatamente al responsable del laboratorio y reflejarse en las observaciones de la reserva.</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 flex justify-end bg-slate-50">
+                <button onclick="app.closeNormativa()" class="px-6 py-2.5 text-sm font-bold rounded-lg text-white bg-blue-600 shadow-md hover:bg-blue-700 active:scale-95 smooth-transition">He leído y acepto la normativa</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sysColors = {
+            'orange': { hex: '#f97316', bg: 'bg-orange-500', text: 'text-orange-600', ring: 'ring-orange-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)]', badge: 'bg-orange-50 text-orange-700 border-orange-200' },
+            'blue': { hex: '#3b82f6', bg: 'bg-blue-500', text: 'text-blue-600', ring: 'ring-blue-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)]', badge: 'bg-blue-50 text-blue-700 border-blue-200' },
+            'red': { hex: '#ef4444', bg: 'bg-red-500', text: 'text-red-600', ring: 'ring-red-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(239,68,68,0.3)]', badge: 'bg-red-50 text-red-700 border-red-200' },
+            'teal': { hex: '#14b8a6', bg: 'bg-teal-500', text: 'text-teal-600', ring: 'ring-teal-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(20,184,166,0.3)]', badge: 'bg-teal-50 text-teal-700 border-teal-200' },
+            'purple': { hex: '#8b5cf6', bg: 'bg-purple-500', text: 'text-purple-600', ring: 'ring-purple-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)]', badge: 'bg-purple-50 text-purple-700 border-purple-200' }
+        };
+
+        const app = {
+            state: {
+                equipments: [
+                    { id: 'dsc', cat: 'Análisis Térmico', color: 'orange', name: 'DSC', desc: 'Análisis de transiciones térmicas, Tg y entalpías.', icon: 'fa-fire-flame-curved' },
+                    { id: 'rheo', cat: 'Análisis Térmico', color: 'orange', name: 'Reómetro', desc: 'Caracterización viscoelástica y módulos de almacenamiento.', icon: 'fa-droplet' },
+                    { id: 'dea', cat: 'Análisis Térmico', color: 'orange', name: 'Analizador DEA', desc: 'Monitorización del proceso de curado y cinética.', icon: 'fa-bolt' },
+                    
+                    { id: 'instron', cat: 'Ensayos Mecánicos', color: 'blue', name: 'Instron', desc: 'Propiedades mecánicas (tracción, compresión, flexión).', icon: 'fa-arrows-down-to-line' },
+                    { id: 'dens', cat: 'Ensayos Mecánicos', color: 'blue', name: 'Balanza de Densidades', desc: 'Determinación de densidad en sólidos y líquidos.', icon: 'fa-scale-balanced' },
+                    
+                    { id: 'mufla', cat: 'Hornos y Estufas', color: 'red', name: 'Mufla', desc: 'Calcinación de muestras y tratamientos extremos.', icon: 'fa-fire' },
+                    { id: 'horno', cat: 'Hornos y Estufas', color: 'red', name: 'Horno Tubular', desc: 'Tratamientos térmicos bajo atmósfera inerte.', icon: 'fa-fire-burner' },
+                    { id: 'est1', cat: 'Hornos y Estufas', color: 'red', name: 'Estufa 1', desc: 'Secado de muestras y curado de resinas.', icon: 'fa-temperature-arrow-up' },
+                    { id: 'est2', cat: 'Hornos y Estufas', color: 'red', name: 'Estufa 2', desc: 'Tratamientos térmicos prolongados.', icon: 'fa-temperature-arrow-up' },
+                    
+                    { id: 'camp027', cat: 'Extracción', color: 'teal', name: 'Campana del 027', desc: 'Extracción de gases en laboratorio 027.', icon: 'fa-wind' },
+                    { id: 'camp101', cat: 'Extracción', color: 'teal', name: 'Campana del 101', desc: 'Extracción de gases en laboratorio 101.', icon: 'fa-wind' },
+                    { id: 'camp102', cat: 'Extracción', color: 'teal', name: 'Campana del 102', desc: 'Extracción de gases en laboratorio 102.', icon: 'fa-wind' },
+                    { id: 'quesera', cat: 'Extracción', color: 'teal', name: 'Quesera', desc: 'Quesera para manipulación en ambiente controlado.', icon: 'fa-flask-vial' },
+                    
+                    { id: 'speed', cat: 'Procesamiento', color: 'purple', name: 'Speed Mixer', desc: 'Homogeneización rápida y desgasificación.', icon: 'fa-blender' },
+                    { id: 'soni', cat: 'Procesamiento', color: 'purple', name: 'Ultrasonidos', desc: 'Baño de ultrasonidos para dispersión de nanopartículas.', icon: 'fa-water' },
+                    { id: 'crio', cat: 'Procesamiento', color: 'purple', name: 'Criomolienda', desc: 'Molienda a bajas temperaturas con nitrógeno líquido.', icon: 'fa-snowflake' },
+                    { id: 'imp3d', cat: 'Procesamiento', color: 'purple', name: 'Impresora 3D', desc: 'Fabricación aditiva de probetas y prototipos.', icon: 'fa-cubes' },
+                    
+                    { id: 'micro', cat: 'Caracterización', color: 'orange', name: 'Microscopio', desc: 'Inspección óptica de morfología y dispersión.', icon: 'fa-microscope' }
+                ],
+                reservations: [],
+                currentUser: '',
+                selectedEqId: null,
+                pendingRes: null,
+                pendingDelete: null,
+                registeredUsers: {},
+                
+                currentWeekStart: new Date(),
+                daysNames: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                monthsNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                hours: Array.from({length: 27}, (_, i) => {
+                    const h = Math.floor(8 + i / 2);
+                    const m = i % 2 === 0 ? '00' : '30';
+                    return `${h < 10 ? '0' : ''}${h}:${m}`;
+                })
+            },
+
+            init() {
+                const savedUser = localStorage.getItem('pcg_user_cloud_v1');
+                if (savedUser) {
+                    this.state.currentUser = savedUser;
+                    document.getElementById('headerUserName').innerText = savedUser;
+                }
+
+                const checkFirebaseReady = setInterval(() => {
+                    if (window.db) {
+                        clearInterval(checkFirebaseReady);
+                        
+                        window.dbOnValue(window.dbRef(window.db, 'reservations'), (snapshot) => {
+                            const data = snapshot.val();
+                            this.state.reservations = data ? Object.values(data) : [];
+                            if (this.state.selectedEqId) this.renderCalendar();
+                        });
+
+                        window.dbOnValue(window.dbRef(window.db, 'users'), (snapshot) => {
+                            const data = snapshot.val();
+                            this.state.registeredUsers = data || {};
+                        });
+                    }
+                }, 100);
+
+                this.goToToday();
+                this.renderDashboard();
+            },
+
+            openUserModal() {
+                document.getElementById('userModal').classList.remove('hidden');
+                document.getElementById('loginError').classList.add('hidden');
+                
+                const loginView = document.getElementById('loginFormView');
+                const profileView = document.getElementById('profileFormView');
+                const content = document.getElementById('userContent');
+
+                if (this.state.currentUser) {
+                    loginView.classList.add('hidden');
+                    profileView.classList.remove('hidden');
+                    document.getElementById('profileUserName').innerText = this.state.currentUser;
+                } else {
+                    profileView.classList.add('hidden');
+                    loginView.classList.remove('hidden');
+                    document.getElementById('setupUserName').value = '';
+                    document.getElementById('setupUserPin').value = '';
+                }
+
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                    if (!this.state.currentUser) document.getElementById('setupUserName').focus();
+                }, 10);
+            },
+
+            closeUserModal() {
+                const content = document.getElementById('userContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('userModal').classList.add('hidden'), 300);
+            },
+
+            saveUser(e) {
+                e.preventDefault();
+                const name = document.getElementById('setupUserName').value.trim();
+                const pin = document.getElementById('setupUserPin').value.trim();
+                const errorBox = document.getElementById('loginError');
+                
+                if(name && pin.length === 4) {
+                    if (this.state.registeredUsers[name]) {
+                        if (this.state.registeredUsers[name] !== pin) {
+                            errorBox.innerHTML = '<i class="fa-solid fa-lock"></i> PIN incorrecto para este investigador';
+                            errorBox.classList.remove('hidden');
+                            return;
+                        }
+                    } else {
+                        this.state.registeredUsers[name] = pin;
+                        window.dbSet(window.dbRef(window.db, 'users/' + name), pin);
+                    }
+
+                    this.state.currentUser = name;
+                    localStorage.setItem('pcg_user_cloud_v1', name);
+                    document.getElementById('headerUserName').innerText = name;
+                    this.closeUserModal();
+                }
+            },
+
+            logout() {
+                this.state.currentUser = '';
+                localStorage.removeItem('pcg_user_cloud_v1');
+                document.getElementById('headerUserName').innerText = 'Identificarse';
+                this.closeUserModal();
+            },
+
+            openNormativa() {
+                document.getElementById('normativaModal').classList.remove('hidden');
+                const content = document.getElementById('normativaContent');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            closeNormativa() {
+                const content = document.getElementById('normativaContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('normativaModal').classList.add('hidden'), 300);
+            },
+
+            renderDashboard() {
+                const container = document.getElementById('categoriesContainer');
+                const cats = [...new Set(this.state.equipments.map(e => e.cat))];
+                
+                container.innerHTML = cats.map(cat => {
+                    const eqList = this.state.equipments.filter(e => e.cat === cat);
+                    const sampleEq = eqList[0] || {color: 'blue'};
+                    const theme = sysColors[sampleEq.color] || sysColors['blue'];
+
+                    return `
+                        <div class="space-y-6 animate-enter">
+                            <div class="flex items-center gap-3 border-b border-slate-200 pb-3">
+                                <div class="w-3.5 h-7 rounded-full ${theme.bg}"></div>
+                                <h3 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">${cat}</h3>
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${theme.badge} border">${eqList.length} equipos</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                ${eqList.map(eq => {
+                                    const t = sysColors[eq.color] || sysColors['blue'];
+                                    return `
+                                        <div onclick="app.selectEquipment('${eq.id}')" class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-sm hover:shadow-card-hover ${t.glow} smooth-transition cursor-pointer flex flex-col justify-between group relative overflow-hidden">
+                                            <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full -z-0 group-hover:scale-110 smooth-transition"></div>
+                                            <div class="relative z-10">
+                                                <div class="flex items-center justify-between mb-4">
+                                                    <div class="w-12 h-12 rounded-xl ${t.bg} text-white flex items-center justify-center text-xl shadow-md group-hover:rotate-6 smooth-transition">
+                                                        <i class="fa-solid ${eq.icon}"></i>
+                                                    </div>
+                                                    <span class="text-xs font-bold text-slate-400 group-hover:${t.text} smooth-transition uppercase tracking-wider">Cloud Lab</span>
+                                                </div>
+                                                <h4 class="text-xl font-black text-slate-900 mb-2 group-hover:${t.text} smooth-transition">${eq.name}</h4>
+                                                <p class="text-xs text-slate-500 font-medium leading-relaxed mb-6">${eq.desc}</p>
+                                            </div>
+                                            <div class="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between">
+                                                <span class="text-xs font-bold text-slate-700">Ver calendario y turnos</span>
+                                                <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:${t.bg} group-hover:text-white text-slate-400 flex items-center justify-center smooth-transition">
+                                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            selectEquipment(eqId) {
+                this.state.selectedEqId = eqId;
+                const eq = this.state.equipments.find(e => e.id === eqId);
+                if (!eq) return;
+
+                document.getElementById('calEqTitle').innerText = eq.name;
+                document.getElementById('calEqDesc').innerText = eq.desc;
+                document.getElementById('calEqBadge').innerText = eq.cat;
+                
+                const theme = sysColors[eq.color] || sysColors['blue'];
+                const iconBox = document.getElementById('calEqIconBox');
+                iconBox.className = `w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm border bg-white ${theme.text}`;
+                document.getElementById('calEqIcon').className = `fa-solid ${eq.icon}`;
+
+                document.getElementById('dashboardView').classList.add('hidden');
+                document.getElementById('calendarView').classList.remove('hidden');
+
+                this.renderCalendar();
+            },
+
+            showDashboard() {
+                this.state.selectedEqId = null;
+                document.getElementById('calendarView').classList.add('hidden');
+                document.getElementById('dashboardView').classList.remove('hidden');
+            },
+
+            goToToday() {
+                const now = new Date();
+                const day = now.getDay();
+                const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+                this.state.currentWeekStart = new Date(now.setDate(diff));
+                this.state.currentWeekStart.setHours(0,0,0,0);
+                if (this.state.selectedEqId) this.renderCalendar();
+            },
+
+            changeWeek(dir) {
+                this.state.currentWeekStart.setDate(this.state.currentWeekStart.getDate() + (dir * 7));
+                this.renderCalendar();
+            },
+
+            getWeekDates() {
+                let dates = [];
+                let start = new Date(this.state.currentWeekStart);
+                for(let i=0; i<7; i++) {
+                    let d = new Date(start);
+                    d.setDate(start.getDate() + i);
+                    dates.push(d);
+                }
+                return dates;
+            },
+
+            renderCalendar() {
+                const weekDates = this.getWeekDates();
+                const firstD = weekDates[0];
+                const lastD = weekDates[6];
+                
+                const m1 = this.state.monthsNames[firstD.getMonth()];
+                const m2 = this.state.monthsNames[lastD.getMonth()];
+                let monthTxt = `${m1} ${firstD.getFullYear()}`;
+                if(firstD.getMonth() !== lastD.getMonth()) {
+                    monthTxt = `${m1} - ${m2} ${lastD.getFullYear()}`;
+                }
+                document.getElementById('calMonthTxt').innerText = monthTxt;
+
+                let headerHtml = `<div class="cal-cell py-4 text-center border-b-2 border-slate-200 bg-white sticky left-0 z-30 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">Hora</div>`;
+                weekDates.forEach((d, idx) => {
+                    const isToday = d.toDateString() === new Date().toDateString();
+                    const isWeekend = idx >= 5;
+                    headerHtml += `
+                        <div class="cal-cell py-3 px-2 text-center border-b-2 border-slate-200 ${isWeekend ? 'weekend-bg' : 'bg-white'}">
+                            <span class="block text-[10px] text-slate-400 font-bold uppercase">${this.state.daysNames[idx]}</span>
+                            <span class="text-sm font-black ${isToday ? 'bg-blue-600 text-white px-2 py-0.5 rounded-full inline-block mt-0.5' : 'text-slate-800'}">${d.getDate()} ${this.state.monthsNames[d.getMonth()].substring(0,3)}</span>
+                        </div>
+                    `;
+                });
+                document.getElementById('calGridHeader').innerHTML = headerHtml;
+
+                let bodyHtml = '';
+                this.state.hours.forEach(hour => {
+                    bodyHtml += `<div class="cal-grid bg-white">`;
+                    bodyHtml += `<div class="cal-cell py-3 px-1 text-center text-[11px] font-black text-slate-400 bg-slate-50/90 sticky left-0 z-20 flex items-center justify-center border-b border-r border-slate-200 shadow-[2px_0_5px_rgba(0,0,0,0.02)]">${hour}</div>`;
+
+                    weekDates.forEach((d, idx) => {
+                        const dateStr = d.toISOString().split('T')[0];
+                        const isWeekend = idx >= 5;
+                        const res = this.state.reservations.find(r => r.eqId === this.state.selectedEqId && r.date === dateStr && r.hour === hour);
+
+                        if (res) {
+                            const userColors = [
+                                { bg: 'bg-emerald-500', border: 'border-emerald-600', textLight: 'text-emerald-100', textDark: 'text-emerald-50', badge: 'bg-emerald-700/80' },
+                                { bg: 'bg-amber-500', border: 'border-amber-600', textLight: 'text-amber-100', textDark: 'text-amber-50', badge: 'bg-amber-700/80' },
+                                { bg: 'bg-rose-500', border: 'border-rose-600', textLight: 'text-rose-100', textDark: 'text-rose-50', badge: 'bg-rose-700/80' },
+                                { bg: 'bg-indigo-500', border: 'border-indigo-600', textLight: 'text-indigo-100', textDark: 'text-indigo-50', badge: 'bg-indigo-700/80' },
+                                { bg: 'bg-fuchsia-500', border: 'border-fuchsia-600', textLight: 'text-fuchsia-100', textDark: 'text-fuchsia-50', badge: 'bg-fuchsia-700/80' },
+                                { bg: 'bg-blue-500', border: 'border-blue-600', textLight: 'text-blue-100', textDark: 'text-blue-50', badge: 'bg-blue-700/80' }
+                            ];
+                            let hash = 0;
+                            for (let i = 0; i < res.user.length; i++) hash = res.user.charCodeAt(i) + ((hash << 5) - hash);
+                            const uColor = userColors[Math.abs(hash) % userColors.length];
+
+                            bodyHtml += `
+                                <div onclick="app.viewReservation('${res.id}')" class="cal-cell p-2 ${isWeekend ? 'weekend-bg' : 'bg-white'} relative cursor-pointer group hover:bg-slate-50 smooth-transition">
+                                    <div class="w-full h-full ${uColor.bg} text-white rounded-lg p-2 text-xs shadow-sm flex flex-col justify-between overflow-hidden border ${uColor.border}">
+                                        <div>
+                                            <p class="font-black truncate leading-tight">${res.user}</p>
+                                            <p class="text-[10px] ${uColor.textLight} truncate font-semibold">${res.sample || 'Sin muestra'}</p>
+                                        </div>
+                                        <div class="text-[9px] ${uColor.badge} px-1.5 py-0.5 rounded ${uColor.textDark} truncate mt-1">${res.method || 'Estándar'}</div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            bodyHtml += `
+                                <div onclick="app.openModal('${dateStr}', '${hour}')" class="cal-cell p-1.5 ${isWeekend ? 'weekend-bg' : 'bg-white'} relative cursor-pointer group hover:bg-blue-50/50 smooth-transition">
+                                    <div class="w-full h-full rounded-lg border border-dashed border-transparent group-hover:border-blue-300 flex items-center justify-center opacity-0 group-hover:opacity-100 smooth-transition">
+                                        <i class="fa-solid fa-plus text-blue-500 text-xs"></i>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    bodyHtml += `</div>`;
+                });
+                document.getElementById('calendarBody').innerHTML = bodyHtml;
+            },
+
+            openModal(dateStr, startHour) {
+                if (!this.state.currentUser) {
+                    this.openUserModal();
+                    return;
+                }
+
+                this.state.pendingRes = { dateStr, startHour };
+                document.getElementById('formError').classList.add('hidden');
+                
+                const parts = dateStr.split('-');
+                document.getElementById('summaryStartDateText').innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                document.getElementById('summaryStartHourText').innerText = startHour;
+                
+                const endInput = document.getElementById('summaryDateEnd');
+                endInput.value = dateStr;
+                endInput.min = dateStr;
+
+                document.getElementById('formUserName').value = this.state.currentUser;
+                document.getElementById('formNotes').value = '';
+
+                const eq = this.state.equipments.find(e => e.id === this.state.selectedEqId);
+                const eqNameEl = document.getElementById('formEqName');
+                if(eqNameEl && eq) eqNameEl.innerText = eq.name;
+
+                this.updateEndHours();
+                this.renderDynamicFields();
+
+                document.getElementById('bookingModal').classList.remove('hidden');
+                const content = document.getElementById('modalContent');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            updateEndHours() {
+                const endHourSelect = document.getElementById('summaryHourEnd');
+                const startHour = this.state.pendingRes.startHour;
+                const startIndex = this.state.hours.indexOf(startHour);
+                
+                let opts = '';
+                for(let i = startIndex + 1; i < this.state.hours.length; i++) {
+                    opts += `<option value="${this.state.hours[i]}">${this.state.hours[i]}</option>`;
+                }
+                if(startIndex === this.state.hours.length - 1) {
+                    opts = `<option value="${startHour}">${startHour} (Mínimo)</option>`;
+                }
+                endHourSelect.innerHTML = opts;
+            },
+
+            renderDynamicFields() {
+                const container = document.getElementById('dynamicFormContainer');
+                const eq = this.state.equipments.find(e => e.id === this.state.selectedEqId);
+                if (!eq) return;
+
+                let html = `
+                    <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100 shadow-sm mb-3">
+                        <label class="block text-[13px] font-black text-slate-800 mb-2"><i class="fa-solid fa-flask mr-1 text-blue-600"></i> Nombre de la Muestra o Proyecto <span class="text-red-500">*</span></label>
+                        <input type="text" id="formSample" required class="w-full bg-white border-2 border-slate-300 rounded-xl px-4 py-3.5 text-base font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100 smooth-transition shadow-inner" placeholder="Ej. Epoxi-Nanosilica 2% wt">
+                    </div>
+                `;
+
+                if (eq.cat === 'Análisis Térmico') {
+                    html += `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                                <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> Método / Rampa</label>
+                                <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. 25 a 300°C @ 10K/min">
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                                <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-wind mr-1 text-slate-500"></i> Atmósfera / Purga</label>
+                                <select id="formAtm" class="w-full bg-white border-2 border-slate-300 rounded-lg px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition">
+                                    <option value="Nitrógeno (N2)">Nitrógeno (N2)</option>
+                                    <option value="Aire Sintético">Aire Sintético</option>
+                                    <option value="Oxígeno (O2)">Oxígeno (O2)</option>
+                                    <option value="Argón (Ar)">Argón (Ar)</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                } else if (eq.cat === 'Ensayos Mecánicos') {
+                    html += `
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-sliders mr-1 text-slate-500"></i> Célula de Carga / Mordazas</label>
+                            <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. Célula 10kN, mordazas de cuña">
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-sliders mr-1 text-slate-500"></i> Parámetros del Ensayo / Condiciones</label>
+                            <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. Ciclo estándar 15 min / 120ºC">
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+            },
+
+            closeModal() {
+                const content = document.getElementById('modalContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('bookingModal').classList.add('hidden'), 300);
+            },
+
+            submitReservation(e) {
+                e.preventDefault();
+                const startDateStr = this.state.pendingRes.dateStr;
+                const startHour = this.state.pendingRes.startHour;
+                const endDateStr = document.getElementById('summaryDateEnd').value;
+                const endHour = document.getElementById('summaryHourEnd').value;
+
+                const sample = document.getElementById('formSample').value.trim();
+                const methodInput = document.getElementById('formMethod');
+                const method = methodInput ? methodInput.value.trim() : 'Estándar';
+                const atmSelect = document.getElementById('formAtm');
+                const atm = atmSelect ? atmSelect.value : '';
+                const notes = document.getElementById('formNotes').value.trim();
+
+                const seriesId = 'SERIES_' + Date.now();
+                const slots = this.generateTimeSlots(startDateStr, startHour, endDateStr, endHour);
+
+                for (let s of slots) {
+                    const conflict = this.state.reservations.find(r => r.eqId === this.state.selectedEqId && r.date === s.date && r.hour === s.hour);
+                    if (conflict) {
+                        const errBox = document.getElementById('formError');
+                        errBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Conflicto: La franja del ${s.date} a las ${s.hour} ya está reservada.`;
+                        errBox.classList.remove('hidden');
+                        return;
+                    }
+                }
+
+                for (let s of slots) {
+                    const resId = 'RES_' + Math.random().toString(36).substr(2, 9);
+                    const newRes = {
+                        id: resId,
+                        seriesId: seriesId,
+                        eqId: this.state.selectedEqId,
+                        date: s.date,
+                        hour: s.hour,
+                        user: this.state.currentUser,
+                        sample: sample,
+                        method: method,
+                        atm: atm,
+                        notes: notes
+                    };
+                    window.dbSet(window.dbRef(window.db, 'reservations/' + resId), newRes);
+                }
+
+                this.closeModal();
+            },
+
+            generateTimeSlots(startDate, startHour, endDate, endHour) {
+                let slots = [];
+                let currDate = new Date(startDate);
+                let lastDate = new Date(endDate);
+
+                while (currDate <= lastDate) {
+                    let dStr = currDate.toISOString().split('T')[0];
+                    let startIdx = (dStr === startDate) ? this.state.hours.indexOf(startHour) : 0;
+                    let endIdx = (dStr === endDate) ? this.state.hours.indexOf(endHour) : this.state.hours.length - 1;
+
+                    for (let i = startIdx; i <= endIdx; i++) {
+                        slots.push({ date: dStr, hour: this.state.hours[i] });
+                    }
+                    currDate.setDate(currDate.getDate() + 1);
+                }
+                return slots;
+            },
+
+            viewReservation(resId) {
+                const res = this.state.reservations.find(r => r.id === resId);
+                if (!res) return;
+
+                const eq = this.state.equipments.find(e => e.id === res.eqId);
+                document.getElementById('viewUser').innerText = res.user;
+                document.getElementById('viewEq').innerText = eq ? eq.name : res.eqId;
+                document.getElementById('viewDate').innerText = `${res.date} a las ${res.hour}`;
+
+                let detailsHtml = `
+                    <div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Muestra:</span><span class="text-xs font-bold text-slate-800">${res.sample || 'N/A'}</span></div>
+                    <div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Método / Rampa:</span><span class="text-xs font-bold text-slate-800">${res.method || 'N/A'}</span></div>
+                `;
+                if (res.atm) {
+                    detailsHtml += `<div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Atmósfera:</span><span class="text-xs font-bold text-slate-800">${res.atm}</span></div>`;
+                }
+                if (res.notes) {
+                    detailsHtml += `<div class="py-1.5 pt-2"><span class="text-xs font-bold text-slate-400 block mb-1">Observaciones:</span><p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">${res.notes}</p></div>`;
+                }
+                document.getElementById('viewDetails').innerHTML = detailsHtml;
+
+                const footer = document.getElementById('viewFooter');
+                const isOwner = res.user === this.state.currentUser;
+
+                if (isOwner) {
+                    footer.innerHTML = `
+                        <button onclick="app.promptDelete('${res.id}')" class="px-4 py-2 text-xs font-bold rounded-lg text-white bg-red-500 hover:bg-red-600 shadow-sm active:scale-95 smooth-transition"><i class="fa-solid fa-trash-can mr-1.5"></i> Borrar Reserva</button>
+                        <button onclick="app.closeView()" class="px-4 py-2 text-xs font-bold rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200">Cerrar</button>
+                    `;
+                } else {
+                    footer.innerHTML = `
+                        <span class="text-[11px] font-bold text-slate-400 italic"><i class="fa-solid fa-lock mr-1"></i> Solo ${res.user} puede modificarla</span>
+                        <button onclick="app.closeView()" class="px-4 py-2 text-xs font-bold rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200">Cerrar</button>
+                    `;
+                }
+
+                document.getElementById('viewModal').classList.remove('hidden');
+                const content = document.getElementById('viewContent');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            closeView() {
+                const content = document.getElementById('viewContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('viewModal').classList.add('hidden'), 300);
+            },
+
+            promptDelete(resId) {
+                const res = this.state.reservations.find(r => r.id === resId);
+                if (!res) return;
+
+                this.state.pendingDelete = res;
+                this.closeView();
+
+                const seriesCount = this.state.reservations.filter(r => r.seriesId === res.seriesId).length;
+                const msgBox = document.getElementById('confirmMsg');
+                const btnAll = document.getElementById('confirmBtnAll');
+                const btnSingle = document.getElementById('confirmBtnSingle');
+
+                if (seriesCount > 1) {
+                    msgBox.innerHTML = `Esta reserva forma parte de una serie de <strong>${seriesCount} franjas horarias</strong> consecutivas.`;
+                    btnAll.classList.remove('hidden');
+                    btnAll.onclick = () => app.deleteReservation(true);
+                } else {
+                    msgBox.innerHTML = `¿Estás seguro de que deseas eliminar esta franja horaria?`;
+                    btnAll.classList.add('hidden');
+                }
+
+                btnSingle.onclick = () => app.deleteReservation(false);
+
+                document.getElementById('confirmModal').classList.remove('hidden');
+                const content = document.getElementById('confirmContent');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            closeConfirm() {
+                const content = document.getElementById('confirmContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('confirmModal').classList.add('hidden'), 300);
+            },
+
+            deleteReservation(allSeries) {
+                const res = this.state.pendingDelete;
+                if (!res) return;
+
+                if (allSeries) {
+                    const seriesItems = this.state.reservations.filter(r => r.seriesId === res.seriesId);
+                    seriesItems.forEach(item => {
+                        window.dbRemove(window.dbRef(window.db, 'reservations/' + item.id));
+                    });
+                } else {
+                    window.dbRemove(window.dbRef(window.db, 'reservations/' + res.id));
+                }
+
+                this.closeConfirm();
+            }
+        };
+
+        window.onload = function() {
+            app.init();
+        };
+    </script>
+</body>
+</html>
