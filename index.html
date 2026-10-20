@@ -57,6 +57,16 @@
         .weekend-bg { background-color: #f1f5f9; }
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .animate-enter { animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Estilos de Fórmulas Matemáticas de Alta Claridad */
+        .sci-var { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 700; padding: 0 1px; color: #0f172a; }
+        .sci-unit { font-family: 'Inter', sans-serif; font-style: normal; font-weight: 700; color: #334155; }
+        .eq-box { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; background: #ffffff; border: 1.5px solid #cbd5e1; border-left: 4px solid #4f46e5; border-radius: 10px; padding: 10px 14px; margin: 8px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 14px; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .math-frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; font-size: 92%; }
+        .math-frac-num { border-bottom: 1.5px solid #334155; padding: 0 5px 2px 5px; line-height: 1.1; font-style: italic; font-weight: 700; }
+        .math-frac-den { padding: 2px 5px 0 5px; line-height: 1.1; font-style: italic; font-weight: 700; }
+        .spec-list li { position: relative; padding-left: 14px; margin-bottom: 3px; }
+        .spec-list li::before { content: "•"; position: absolute; left: 2px; font-weight: 900; color: #64748b; }
     </style>
 </head>
 <body class="h-screen w-full flex flex-col font-sans overflow-hidden">
@@ -85,11 +95,14 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button onclick="app.openNormativa()" class="px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-slate-200 shadow-sm active:scale-95">
+        <div class="flex items-center gap-2 md:gap-3">
+            <button onclick="app.openTecnicas()" class="px-3.5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-indigo-200 shadow-sm active:scale-95">
+                <i class="fa-solid fa-microscope text-indigo-600"></i> <span class="hidden sm:inline">Fichas Técnicas y Equipos</span>
+            </button>
+            <button onclick="app.openNormativa()" class="px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-slate-200 shadow-sm active:scale-95">
                 <i class="fa-solid fa-book-open text-blue-600"></i> <span class="hidden sm:inline">Normativa</span>
             </button>
-            <button onclick="app.openUserModal()" class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-blue-200 shadow-sm active:scale-95">
+            <button onclick="app.openUserModal()" class="px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-bold rounded-lg smooth-transition flex items-center gap-2 border border-blue-200 shadow-sm active:scale-95">
                 <i class="fa-solid fa-circle-user"></i> <span id="headerUserName">Identificarse</span>
             </button>
         </div>
@@ -142,6 +155,7 @@
         </div>
     </main>
 
+    <!-- MODAL DE USUARIO -->
     <div id="userModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition" id="userContent">
             
@@ -190,6 +204,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE RESERVA -->
     <div id="bookingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-95 opacity-0 smooth-transition" id="modalContent">
             
@@ -247,6 +262,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMACIÓN DE BORRADO -->
     <div id="confirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition p-6 text-center" id="confirmContent">
             <div class="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-2xl border border-red-100"><i class="fa-solid fa-trash-can"></i></div>
@@ -260,6 +276,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE VISUALIZACIÓN -->
     <div id="viewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 opacity-0 smooth-transition flex flex-col" id="viewContent">
             <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -279,41 +296,1193 @@
         </div>
     </div>
 
-    <div id="normativaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform scale-95 opacity-0 smooth-transition" id="normativaContent">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="text-lg font-black text-slate-900 uppercase tracking-wide flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-blue-600"></i> Normativa General del Laboratorio (PCG)</h3>
-                <button onclick="app.closeNormativa()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-700 smooth-transition"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-6 space-y-6 text-sm text-slate-700 max-h-[65vh] overflow-y-auto leading-relaxed">
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base"><i class="fa-solid fa-desktop mr-2 text-blue-600"></i>I. Protocolo de Reservas y Uso de Equipos</h4>
-                    <p><strong>1.1. Identidad intransferible:</strong> El acceso a la plataforma requiere identificación con PIN personal. Queda terminantemente prohibido realizar reservas utilizando cuentas de terceros o suplantar la identidad de otro investigador.</p>
-                    <p><strong>1.2. Optimización del tiempo:</strong> Si un ensayo o ciclo térmico finaliza antes de lo previsto, es obligatorio liberar las franjas horarias reservadas restantes para permitir el acceso a otros compañeros del grupo.</p>
-                    <p><strong>1.3. Antelación y cancelación:</strong> Las reservas deben ajustarse estrictamente al tiempo real estimado de preparación y medida. Los bloques fantasma sin uso justificado serán cancelados por los responsables del laboratorio.</p>
+    <!-- MODAL CATÁLOGO OFICIAL DE FICHAS TÉCNICAS Y EQUIPAMIENTO -->
+    <div id="tecnicasModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-7xl overflow-hidden transform scale-95 opacity-0 smooth-transition flex flex-col max-h-[92vh]" id="tecnicasContent">
+            
+            <div class="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-indigo-50 via-white to-blue-50 flex-none">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md">
+                        <i class="fa-solid fa-microscope"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Catálogo Oficial de Técnicas, Fórmulas y Especificaciones (PCG)</h3>
+                        <p class="text-xs font-semibold text-slate-500 mt-0.5">Especificaciones de fabricantes, modelos exactos, ecuaciones fundamentales y magnitudes físicas observadas.</p>
+                    </div>
                 </div>
+                <button onclick="app.closeTecnicas()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-800 smooth-transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-6 md:p-8 space-y-12 text-sm text-slate-700 overflow-y-auto leading-relaxed bg-slate-50/70 flex-1">
                 
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-shield-halved mr-2 text-blue-600"></i>II. Normas de Seguridad y Equipos de Protección (EPIs)</h4>
-                    <p><strong>2.1. Indumentaria obligatoria:</strong> Es obligatorio el uso de bata de laboratorio abrochada, gafas de seguridad homologadas y calzado cerrado en todo el recinto del laboratorio.</p>
-                    <p><strong>2.2. Protección térmica y criogénica:</strong> Para el manejo de muflas, hornos tubulares y estufas a altas temperaturas, es obligatorio el uso de guantes térmicos. Para la manipulación de nitrógeno líquido en la criomolienda, se deben emplear guantes criogénicos y pantalla facial.</p>
-                    <p><strong>2.3. Emisión de gases y campanas:</strong> Cualquier manipulación de disolventes orgánicos, resinas epoxi o polímeros que emitan vapores debe realizarse exclusivamente bajo las campanas de extracción (Campana 027, 101, 102 o Quesera) con el sistema de extracción encendido.</p>
+                <!-- ========================================== -->
+                <!-- BLOQUE 1: Análisis Térmico y Reología -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-orange-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-black text-sm shadow-sm">1</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Análisis Térmico y Reología</h4>
+                            <p class="text-xs text-slate-500 font-medium">Transiciones de fase, entalpías de reacción, viscoelasticidad, punto de gel y curvas de flujo.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- DSC -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-orange-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-orange-600 block">Calorimetría Diferencial de Barrido</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-fire-flame-curved text-orange-500"></i> DSC (Differential Scanning Calorimetry)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-orange-100 text-orange-800 rounded-md shrink-0">Termoanálisis</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-3"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> ¿Qué es y cómo funciona?:</strong> Técnica termoanalítica que mide la diferencia de flujo de calor (<span class="sci-var">dH/dt</span> en <span class="sci-unit">mW</span>) inyectado entre una muestra polimérica y una cápsula de referencia vacía e inerte mientras ambas son sometidas a un programa controlado de temperatura (calentamiento, enfriamiento o isoterma) bajo atmósfera inerte (<span class="sci-unit">N<sub>2</sub></span>) o reactiva.</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">χ<sub>c</sub></span> (%) = <span class="math-frac"><span class="math-frac-num">ΔH<sub>m</sub> − ΔH<sub>cc</sub></span><span class="math-frac-den">ΔH<sub>m</sub><sup>0</sup> · (1 − w<sub>f</sub>)</span></span> × 100</div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">α</span> (curado) = <span class="math-frac"><span class="math-frac-num">ΔH<sub>total</sub> − ΔH<sub>res</sub></span><span class="math-frac-den">ΔH<sub>total</sub></span></span></div>
+                                </div>
+
+                                <div class="bg-orange-50/90 p-3.5 rounded-lg border border-orange-200/80 my-3">
+                                    <p class="text-xs text-orange-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-orange-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-orange-950 spec-list">
+                                        <li><strong>Temperatura de Transición Vítrea (<span class="sci-var">T<sub>g</sub></span>):</strong> Se observa como un salto endotérmico (escalón) en la línea base debido al cambio en la capacidad calorífica (<span class="sci-var">ΔC<sub>p</sub></span>) al pasar del estado vítreo rígido al estado gomoso.</li>
+                                        <li><strong>Fusión (<span class="sci-var">T<sub>m</sub></span>) y Cristalización (<span class="sci-var">T<sub>c</sub></span>):</strong> Picos endotérmicos de fusión cristalina y picos exotérmicos de ordenamiento macromolecular, determinando el <strong>grado de cristalinidad (<span class="sci-var">χ<sub>c</sub></span>)</strong>.</li>
+                                        <li><strong>Cinética de Curado y Reticulación:</strong> Picos exotérmicos de polimerización en resinas termoestables (epoxi, poliéster, siliconas), obteniendo el calor total de reacción (<span class="sci-var">ΔH<sub>curado</sub></span>) y el <strong>grado de conversión (<span class="sci-var">α</span>)</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Transición Vítrea (<span class="sci-var">T<sub>g</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Fusión (<span class="sci-var">T<sub>m</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Cristalinidad (<span class="sci-var">χ<sub>c</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Grado Curado (<span class="sci-var">α</span>)</span>
+                            </div>
+                        </div>
+
+                        <!-- Reómetro Discovery HR-2 -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-orange-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-orange-600 block">TA Instruments · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-droplet text-orange-500"></i> Reómetro Híbrido Discovery HR-2</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-orange-100 text-orange-800 rounded-md shrink-0">-160 a 600 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Reómetro híbrido equipado con cámara ambiental de convección forzada (<strong>ETC</strong>, <span class="sci-unit">-160 °C a 600 °C</span>, rampa hasta <span class="sci-unit">60 °C/min</span>) y sistema Peltier (<span class="sci-unit">0 a 200 °C</span>). Geometrías disponibles: <strong>Platos paralelos</strong> (<span class="sci-unit">Ø 25 mm</span>, <span class="sci-unit">40 mm</span> y desechables de aluminio), <strong>Cono-Plato</strong> (<span class="sci-unit">1°</span> y <span class="sci-unit">2°</span>, <span class="sci-unit">Ø 40 mm</span>), <strong>Cilindros concéntricos</strong> (líquidos de baja viscosidad) y <strong>Torsión rectangular sólida (DMA)</strong>.</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">G*</span> = <span class="sci-var">G'</span> + <span class="sci-var">iG''</span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">tan δ</span> = <span class="math-frac"><span class="math-frac-num">G''</span><span class="math-frac-den">G'</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>|<span class="sci-var">η*</span>| = <span class="math-frac"><span class="math-frac-num">√( (G')<sup>2</sup> + (G'')<sup>2</sup> )</span><span class="math-frac-den">ω</span></span></div>
+                                </div>
+
+                                <div class="bg-orange-50/90 p-3.5 rounded-lg border border-orange-200/80 my-3">
+                                    <p class="text-xs text-orange-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-orange-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-orange-950 spec-list">
+                                        <li><strong>Viscoelasticidad Dinámica (SAOS):</strong> Mide el <strong>Módulo de Almacenamiento (<span class="sci-var">G'</span>)</strong> (energía elástica recuperada) y el <strong>Módulo de Pérdidas (<span class="sci-var">G''</span>)</strong> (energía disipada por fricción viscosa).</li>
+                                        <li><strong>Punto de Gelificación (<span class="sci-var">t<sub>gel</sub></span>) y Curado:</strong> Monitoriza en isotermo o rampa el cruce <span class="sci-var">G' = G''</span> (<span class="sci-var">tan δ = 1</span>), instante exacto en que la resina líquida forma una red tridimensional infinita.</li>
+                                        <li><strong>Torsión en Estado Sólido (DMA):</strong> Determina con altísima sensibilidad la <span class="sci-var">T<sub>g</sub></span> mecánica (máximo de <span class="sci-var">tan δ</span>) y el módulo en la meseta gomosa (densidad de entrecruzamiento <span class="sci-var">ν<sub>e</sub></span>).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Módulos <span class="sci-var">G'</span> y <span class="sci-var">G''</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Factor <span class="sci-var">tan δ</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Punto de Gel (<span class="sci-var">G'=G''</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Cámara ETC <span class="sci-unit">600 °C</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Viscosímetro Brookfield -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-orange-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-orange-600 block">Brookfield Engineering · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-arrows-spin text-orange-500"></i> Viscosímetro Rotacional DV2T</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-orange-100 text-orange-800 rounded-md shrink-0">0.1 – 200 RPM</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Viscosímetro digital rotacional con pantalla táctil de <span class="sci-unit">5 pulgadas</span>, sonda de temperatura RTD integrada y nivel de burbuja. Velocidad programable entre <span class="sci-unit">0.1 y 200 RPM</span>, con un rango de viscosidad desde <span class="sci-unit">1 cP</span> hasta <span class="sci-unit">6,000,000 cP</span> (<span class="sci-unit">mPa·s</span>) según el juego de husillos (spindles) empleado.</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">η</span> (<span class="sci-unit">mPa·s</span>) = <span class="math-frac"><span class="math-frac-num">τ (Esfuerzo de cizalla)</span><span class="math-frac-den">γ̇ (Velocidad de deformación)</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>Ley Potencia: <span class="sci-var">τ</span> = <span class="sci-var">K</span> · <span class="sci-var">γ̇<sup>n</sup></span></div>
+                                </div>
+
+                                <div class="bg-orange-50/90 p-3.5 rounded-lg border border-orange-200/80 my-3">
+                                    <p class="text-xs text-orange-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-orange-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-orange-950 spec-list">
+                                        <li><strong>Viscosidad Dinámica Aparente (<span class="sci-var">η</span>):</strong> Lectura directa en centipoises (<span class="sci-unit">cP = mPa·s</span>) y porcentaje de par de torsión (<span class="sci-unit">% Torque</span>, óptimo entre <span class="sci-unit">10% y 100%</span>).</li>
+                                        <li><strong>Comportamiento Reológico de Flujo:</strong> Permite distinguir fluidos <strong>Newtonianos</strong> (<span class="sci-var">n = 1</span>), <strong>Pseudoplásticos / Shear-thinning</strong> (<span class="sci-var">n &lt; 1</span>, la viscosidad cae al agitar, típico de resinas con nanopartículas) y <strong>Tixotrópicos</strong> (dependientes del tiempo).</li>
+                                        <li><strong>Tiempo de Vida Útil (Pot-life):</strong> Monitorización del incremento de viscosidad tras mezclar resina y endurecedor para definir la ventana de infusión o colada.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Viscosidad (<span class="sci-unit">cP / mPa·s</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">% Torque</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Pseudoplasticidad</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Pot-Life</span>
+                            </div>
+                        </div>
+
+                        <!-- Baño Circulador PolyScience -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-orange-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-orange-600 block">PolyScience · Control Termostático</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-temperature-low text-orange-500"></i> Baño Circulador Refrigerado AD07R-20</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-orange-100 text-orange-800 rounded-md shrink-0">-20 a 200 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Baño termostático de recirculación externa e interna con capacidad de <span class="sci-unit">7 Litros</span>, rango de trabajo desde <span class="sci-unit">-20 °C hasta 200 °C</span> y una estabilidad térmica extrema de <span class="sci-unit">±0.01 °C</span>. Bomba de presión/succión de velocidad variable y controlador programable SmartTouch.</p>
+
+                                <div class="eq-box">
+                                    <div>Dependencia térmica de Arrhenius: <span class="sci-var">η(T)</span> = <span class="sci-var">η<sub>0</sub></span> · exp<span class=" text-base">(</span><span class="math-frac"><span class="math-frac-num">E<sub>a</sub></span><span class="math-frac-den">R · T</span></span><span class="text-base">)</span></div>
+                                </div>
+
+                                <div class="bg-orange-50/90 p-3.5 rounded-lg border border-orange-200/80 my-3">
+                                    <p class="text-xs text-orange-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-orange-600 mr-1"></i> ¿Qué se logra y controla con el equipo?:</p>
+                                    <ul class="text-xs text-orange-950 spec-list">
+                                        <li><strong>Termostatización de Camisas Externas:</strong> Acoplamiento directo al viscosímetro Brookfield o a reactores encamisados para medir propiedades a temperatura estrictamente constante.</li>
+                                        <li><strong>Disipación de Exotermias:</strong> Evita el sobrecalentamiento y la degradación prematura de disolventes o monómeros durante procesos energéticos como la sonicación por sonda.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Estabilidad <span class="sci-unit">±0.01 °C</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Rango <span class="sci-unit">-20 a 200 °C</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Recirculación Externa</span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-fire mr-2 text-blue-600"></i>III. Ensayos Nocturnos y Fines de Semana</h4>
-                    <p><strong>3.1. Autorización de ciclos largos:</strong> Los equipos operados en ciclos largos continuos (estufas, muflas, ensayos de tracción prolongados) que abarquen noches o fines de semana deben estar debidamente planificados en el calendario cloud.</p>
-                    <p><strong>3.2. Cartelería obligatoria:</strong> Todo equipo dejado en funcionamiento sin supervisión presencial directa debe contar con un cartel visible junto al panel que indique: <em>Nombre del investigador, teléfono de contacto, tipo de muestra, temperatura/régimen y hora prevista de finalización</em>.</p>
+                <!-- ========================================== -->
+                <!-- BLOQUE 2: Caracterización Mecánica, Física y Morfológica -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-blue-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-sm shadow-sm">2</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Caracterización Mecánica, Física y Morfológica</h4>
+                            <p class="text-xs text-slate-500 font-medium">Propiedades estructurales bajo carga, autorreparación asistida, densidad por Arquímedes y microscopía.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- Instron 3365 -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-600 block">Instron® · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-arrows-down-to-line text-blue-600"></i> Máquina Universal de Ensayos Instron 3365</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-blue-100 text-blue-800 rounded-md shrink-0">Hasta 5 kN</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Marco de ensayos electromecánico de doble columna con capacidad máxima de <span class="sci-unit">5 kN</span> y velocidad de cruceta de <span class="sci-unit">0.05 a 1000 mm/min</span>. Dispone de células de carga intercambiables de <strong><span class="sci-unit">5 kN</span>, <span class="sci-unit">1 kN</span> y <span class="sci-unit">100 N</span></strong>, mordazas mecánicas de cuña, mordazas neumáticas para películas/elastómeros y platos de compresión/flexión en 3 puntos.</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">σ</span> = <span class="math-frac"><span class="math-frac-num">F</span><span class="math-frac-den">A<sub>0</sub></span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">E</span> = <span class="math-frac"><span class="math-frac-num">Δσ</span><span class="math-frac-den">Δε</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">σ<sub>flex</sub></span> = <span class="math-frac"><span class="math-frac-num">3 · F · L</span><span class="math-frac-den">2 · b · d<sup>2</sup></span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">τ<sub>ILSS</sub></span> = <span class="math-frac"><span class="math-frac-num">3 · F<sub>max</sub></span><span class="math-frac-den">4 · b · d</span></span></div>
+                                </div>
+
+                                <div class="bg-blue-50/90 p-3.5 rounded-lg border border-blue-200/80 my-3">
+                                    <p class="text-xs text-blue-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-blue-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-blue-950 spec-list">
+                                        <li><strong>Curva Tensión-Deformación (<span class="sci-var">σ–ε</span>):</strong> Determinación del <strong>Módulo de Young (<span class="sci-var">E</span>)</strong> en la región elástica lineal, límite elástico (<span class="sci-var">σ<sub>y</sub></span>), resistencia máxima a tracción (<span class="sci-var">σ<sub>max</sub></span>) y deformación en rotura (<span class="sci-var">ε<sub>r</sub></span>).</li>
+                                        <li><strong>Flexión y Cizalladura Interlaminar (ILSS):</strong> Resistencia a flexión en compuestos laminados y adherencia interfacial fibra-matriz mediante ensayo de viga corta.</li>
+                                        <li><strong>Tenacidad (<span class="sci-var">U<sub>T</sub></span>) y Ciclos de Histéresis:</strong> Energía mecánica absorbida hasta rotura (<span class="sci-var">∫σ dε</span>) y disipación de energía en carga-descarga cíclica de elastómeros.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Módulo Young (<span class="sci-var">E</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Células <span class="sci-unit">100N / 1kN / 5kN</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Flexión y Tracción</span>
+                            </div>
+                        </div>
+
+                        <!-- Celda de Autorreparación -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-600 block">Custom Setup · Ensayos Acoplados</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-shield-heart text-blue-600"></i> Celda de Autorreparación (Self-Healing)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-blue-100 text-blue-800 rounded-md shrink-0">Compresión + Calor</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Celda de compresión termo-controlada acoplable a la máquina universal Instron. Permite aplicar de forma simultánea una presión o fuerza compresiva controlada (para asegurar el contacto íntimo entre las caras fracturadas) y un ciclo térmico programado de hasta <span class="sci-unit">250 °C</span>.</p>
+
+                                <div class="eq-box">
+                                    <div>Eficiencia de Autorreparación: <span class="sci-var">η<sub>heal</sub></span> (%) = <span class="math-frac"><span class="math-frac-num">P<sub>reparado</sub> (σ<sub>max</sub>, E, K<sub>IC</sub>)</span><span class="math-frac-den">P<sub>virgen</sub> (σ<sub>max</sub>, E, K<sub>IC</sub>)</span></span> × 100</div>
+                                </div>
+
+                                <div class="bg-blue-50/90 p-3.5 rounded-lg border border-blue-200/80 my-3">
+                                    <p class="text-xs text-blue-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-blue-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-blue-950 spec-list">
+                                        <li><strong>Activación de Redes Dinámicas (Vitrímeros / Diels-Alder):</strong> Evalúa la interdifusión de cadenas y las reacciones de intercambio de enlaces covalentes dinámicos o puentes de hidrógeno a través de la interfaz del daño.</li>
+                                        <li><strong>Recuperación Mecánica Cuantitativa (<span class="sci-var">η<sub>heal</sub></span>):</strong> Cuantifica el porcentaje de resistencia mecánica o tenacidad recuperada tras <span class="sci-var">1, 2, ... n</span> ciclos de rotura y autorreparación bajo condiciones definidas de presión, temperatura y tiempo (<span class="sci-var">P, T, t</span>).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Eficiencia <span class="sci-var">η<sub>heal</sub></span> (%)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Hasta <span class="sci-unit">250 °C</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Vitrímeros y Polímeros Dinámicos</span>
+                            </div>
+                        </div>
+
+                        <!-- Balanza de Densidades Mettler Toledo -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-600 block">Mettler Toledo · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-blue-600"></i> Balanza Hidrostática de Densidades</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-blue-100 text-blue-800 rounded-md shrink-0">Resolución 0.1 mg</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Balanza analítica de alta precisión acoplada al kit de determinación hidrostática de densidades basada en el Principio de Arquímedes (normas ASTM D792 / ISO 1183). Mide el peso de la probeta en aire (<span class="sci-var">m<sub>aire</sub></span>) y sumergida en un líquido auxiliar de densidad conocida (<span class="sci-var">m<sub>fl</sub></span>).</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">ρ<sub>exp</sub></span> = <span class="math-frac"><span class="math-frac-num">m<sub>aire</sub></span><span class="math-frac-den">m<sub>aire</sub> − m<sub>fl</sub></span></span> · (<span class="sci-var">ρ<sub>fl</sub></span> − <span class="sci-var">ρ<sub>aire</sub></span>) + <span class="sci-var">ρ<sub>aire</sub></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">V<sub>v</sub></span> (%) = <span class="math-frac"><span class="math-frac-num">ρ<sub>teo</sub> − ρ<sub>exp</sub></span><span class="math-frac-den">ρ<sub>teo</sub></span></span> × 100</div>
+                                </div>
+
+                                <div class="bg-blue-50/90 p-3.5 rounded-lg border border-blue-200/80 my-3">
+                                    <p class="text-xs text-blue-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-blue-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-blue-950 spec-list">
+                                        <li><strong>Densidad Absoluta (<span class="sci-var">ρ<sub>exp</sub></span> en <span class="sci-unit">g/cm<sup>3</sup></span>):</strong> Determinación exacta en polímeros más densos o menos densos que el agua.</li>
+                                        <li><strong>Fracción Volumétrica de Poros / Huecos (<span class="sci-var">V<sub>v</sub></span>):</strong> Al comparar con la densidad teórica de la regla de las mezclas (<span class="sci-var">ρ<sub>teo</sub></span>), cuantifica el volumen de aire atrapado en el composite (un <span class="sci-var">V<sub>v</sub> &gt; 2%</span> reduce drásticamente la resistencia interlaminar).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Densidad (<span class="sci-var">ρ<sub>exp</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Porosidad (<span class="sci-var">V<sub>v</sub></span> %)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">ASTM D792 / ISO 1183</span>
+                            </div>
+                        </div>
+
+                        <!-- Microscopio Óptico Leica DMR -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-600 block">Leica Microsystems · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-microscope text-blue-600"></i> Microscopio Óptico Leica DMR</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-blue-100 text-blue-800 rounded-md shrink-0">Óptica / Polarización</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Microscopio óptico de investigación con revólver de objetivos acromáticos/planapocromáticos (<span class="sci-unit">5x, 10x, 20x, 50x, 100x</span>), modos de iluminación por <strong>luz reflejada</strong> (episcopía para superficies opacas), <strong>luz transmitida</strong> (diascopía para films transparentes) y polarizadores cruzados, acoplado a cámara digital de captura y software de análisis de imagen.</p>
+
+                                <div class="eq-box">
+                                    <div>Resolución óptica límite (criterio de Abbe): <span class="sci-var">d<sub>min</sub></span> = <span class="math-frac"><span class="math-frac-num">0.61 · λ</span><span class="math-frac-den">NA</span></span> ≈ <span class="sci-unit">0.25 μm</span></div>
+                                </div>
+
+                                <div class="bg-blue-50/90 p-3.5 rounded-lg border border-blue-200/80 my-3">
+                                    <p class="text-xs text-blue-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-blue-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-blue-950 spec-list">
+                                        <li><strong>Estado de Dispersión Microestructural:</strong> Detección de aglomerados micrométricos de cargas (grafeno, CNT, partículas cerámicas), distribución de fibras y presencia de micro-poros.</li>
+                                        <li><strong>Morfología Cristalina (Luz Polarizada - POM):</strong> Observación de birrefringencia y crecimiento de <strong>esferulitas</strong> (patrón en cruz de Malta) en polímeros semicristalinos (PVDF, PEEK, PLA).</li>
+                                        <li><strong>Seguimiento de Autorreparación y Fractografía:</strong> Medición directa de la anchura de grietas antes y después del estímulo de curación.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Luz Reflejada / Transmitida</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Esferulitas (Polarizada)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Cierre de Grietas</span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="space-y-2">
-                    <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 text-base mt-2"><i class="fa-solid fa-triangle-exclamation mr-2 text-blue-600"></i>IV. Mantenimiento, Limpieza y Averías</h4>
-                    <p><strong>4.1. Limpieza rigurosa:</strong> Al finalizar la sesión, el puesto de trabajo, balanzas y accesorios deben quedar perfectamente limpios y libres de restos de polímeros o fibras.</p>
-                    <p><strong>4.2. Notificación de incidencias:</strong> Cualquier anomalía, ruido extraño, fallo de temperatura o error en los equipos debe notificarse inmediatamente al responsable del laboratorio y reflejarse en las observaciones de la reserva.</p>
+                <!-- ========================================== -->
+                <!-- BLOQUE 3: Caracterización Eléctrica, Dieléctrica y Piezoeléctrica -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-indigo-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-sm">3</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Caracterización Eléctrica, Dieléctrica y Piezoeléctrica</h4>
+                            <p class="text-xs text-slate-500 font-medium">Espectroscopía dieléctrica, percolación eléctrica, piezoresistividad, polarización HV y coeficiente piezoeléctrico.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- DEA 288 Ionic -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 block">NETZSCH · Análisis Dieléctrico Térmico</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-bolt text-indigo-600"></i> Analizador Dieléctrico DEA 288 Ionic</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-indigo-100 text-indigo-800 rounded-md shrink-0">1 mHz – 1 MHz</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> ¿Qué es y cómo funciona?:</strong> El <strong>DEA (Dielectric Analysis)</strong> aplica un campo eléctrico sinusoidal alterno (<span class="sci-unit">1 mHz a 1 MHz</span>) a través de sensores interdigitados coplanares (tipo peine IDEX) o prensa de horno (<span class="sci-unit">RT a 400 °C</span>) en contacto con la resina o compuesto. La excitación provoca la orientación oscilante de los dipolos moleculares y el desplazamiento de los iones libres; midiendo la amplitud y el desfase (<span class="sci-var">θ</span>) de la corriente respuesta se caracterizan las propiedades dieléctricas en tiempo real.</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">ε*</span>(<span class="sci-var">ω</span>) = <span class="sci-var">ε'</span> − <span class="sci-var">iε''</span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">σ<sub>AC</sub></span> = <span class="sci-var">ω</span> · <span class="sci-var">ε<sub>0</sub></span> · <span class="sci-var">ε''</span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>Viscosidad Iónica: <span class="sci-var">η<sub>ion</sub></span> = <span class="math-frac"><span class="math-frac-num">1</span><span class="math-frac-den">σ<sub>DC</sub></span></span> = <span class="math-frac"><span class="math-frac-num">1</span><span class="math-frac-den">q · μ · n</span></span></div>
+                                </div>
+
+                                <div class="bg-indigo-50/90 p-3.5 rounded-lg border border-indigo-200/80 my-3">
+                                    <p class="text-xs text-indigo-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-indigo-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-indigo-950 spec-list">
+                                        <li><strong>Permitividad Dieléctrica (<span class="sci-var">ε'</span>) y Factor de Pérdidas (<span class="sci-var">ε''</span>):</strong> Evalúa la capacidad de almacenamiento de carga capacitiva, relajaciones dipolares (<span class="sci-var">α, β</span>) y polarización interfacial (Maxwell-Wagner-Sillars) en nanocompuestos.</li>
+                                        <li><strong>Viscosidad Iónica (<span class="sci-var">η<sub>ion</sub></span> en <span class="sci-unit">Ω·cm</span>):</strong> Como la movilidad iónica (<span class="sci-var">μ</span>) depende inversamente de la viscosidad del medio (ley de Stokes-Einstein), la curva de <span class="sci-var">log(η<sub>ion</sub>)</span> reproduce fielmente la evolución de la viscosidad mecánica durante todo el ciclo térmico.</li>
+                                        <li><strong>Monitorización <em>In-Situ</em> del Curado:</strong> Identifica el mínimo de viscosidad (óptimo para inyección), el inicio de la reticulación (subida brusca de <span class="sci-var">η<sub>ion</sub></span>) y el final del curado o vitrificación (<span class="sci-var">dη<sub>ion</sub>/dt → 0</span>), incluso en piezas gruesas o dentro de moldes cerrados.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Permitividad (<span class="sci-var">ε'</span>, <span class="sci-var">ε''</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Viscosidad Iónica (<span class="sci-var">η<sub>ion</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Curado In-Situ</span>
+                            </div>
+                        </div>
+
+                        <!-- Keithley 2450 SMU -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 block">Keithley Tektronix · Transporte Eléctrico</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-microchip text-indigo-600"></i> Unidad de Medida y Fuente Keithley 2450 SMU</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-indigo-100 text-indigo-800 rounded-md shrink-0">200 V / 1 A / 20 W</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Instrumento SourceMeter® (SMU) táctil de 4 cuadrantes capaz de inyectar tensión (<span class="sci-unit">20 mV a 200 V</span>) o corriente (<span class="sci-unit">10 nA a 1 A</span>, potencia máx. <span class="sci-unit">20 W</span>) mientras mide simultáneamente con sensibilidad de femtoamperios (<span class="sci-unit">10 fA</span>) a 2 o 4 hilos (eliminación de resistencia de contacto).</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">σ</span> (<span class="sci-unit">S/m</span>) = <span class="math-frac"><span class="math-frac-num">L</span><span class="math-frac-den">R · A</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>Factor de Galga (GF): <span class="sci-var">GF</span> = <span class="math-frac"><span class="math-frac-num">ΔR / R<sub>0</sub></span><span class="math-frac-den">ε</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>Percolación: <span class="sci-var">σ</span> ∝ (<span class="sci-var">φ − φ<sub>c</sub></span>)<sup><span class="sci-var">t</span></sup></div>
+                                </div>
+
+                                <div class="bg-indigo-50/90 p-3.5 rounded-lg border border-indigo-200/80 my-3">
+                                    <p class="text-xs text-indigo-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-indigo-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-indigo-950 spec-list">
+                                        <li><strong>Curvas <span class="sci-var">I–V</span> y Conductividad Eléctrica (<span class="sci-var">σ</span>):</strong> Determinación del carácter óhmico o efecto túnel (no lineal) y cálculo del <strong>umbral de percolación (<span class="sci-var">φ<sub>c</sub></span>)</strong> en polímeros dopados con nanotubos de carbono (CNT), grafeno o MXenos.</li>
+                                        <li><strong>Monitorización Piezoresistiva (SHM):</strong> Acoplado a la Instron, registra en tiempo real el cambio relativo de resistencia (<span class="sci-var">ΔR/R<sub>0</sub></span>) frente a la deformación mecánica (<span class="sci-var">ε</span>), determinando la sensibilidad o <strong>Gauge Factor (<span class="sci-var">GF</span>)</strong> y detectando microfisuras internas antes del fallo catastrófico.</li>
+                                        <li><strong>Calentamiento por Efecto Joule (<span class="sci-var">P = I<sup>2</sup>·R</span>):</strong> Inyección de corriente controlada para deshielo (de-icing) o activación térmica de autorreparación.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Conductividad (<span class="sci-unit">S/m</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Factor de Galga (<span class="sci-var">GF</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Efecto Túnel y Joule</span>
+                            </div>
+                        </div>
+
+                        <!-- Fuente de Alta Tensión Heinzinger -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 block">Heinzinger Electronic · Polarización HV</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-plug-circle-bolt text-indigo-600"></i> Fuente de Alto Voltaje Heinzinger LNC 10000-5pos</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-indigo-100 text-indigo-800 rounded-md shrink-0">10 kV / 5 mA</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Fuente de alimentación DC de alta tensión de polaridad positiva con salida regulable hasta <strong><span class="sci-unit">10,000 V (10 kV)</span></strong> y corriente máxima de <strong><span class="sci-unit">5 mA</span></strong>, equipada con limitador de corriente por arco eléctrico (protección frente a ruptura dieléctrica de la muestra).</p>
+
+                                <div class="eq-box">
+                                    <div>Campo de Polarización (Poling): <span class="sci-var">E<sub>p</sub></span> (<span class="sci-unit">kV/mm</span>) = <span class="math-frac"><span class="math-frac-num">V<sub>aplicado</sub></span><span class="math-frac-den">d (espesor muestra)</span></span></div>
+                                </div>
+
+                                <div class="bg-indigo-50/90 p-3.5 rounded-lg border border-indigo-200/80 my-3">
+                                    <p class="text-xs text-indigo-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-indigo-600 mr-1"></i> ¿Qué se logra y observa con el equipo?:</p>
+                                    <ul class="text-xs text-indigo-950 spec-list">
+                                        <li><strong>Polarización Piezoeléctrica (Contact / Corona Poling):</strong> Al someter un polímero ferroeléctrico (como PVDF en fase <span class="sci-var">β</span>) o un compuesto con cerámica piezoeléctrica (<span class="sci-unit">BaTiO<sub>3</sub></span>, PZT, KNN) a un campo <span class="sci-var">E<sub>p</sub></span> intenso a temperatura elevada y enfriarlo bajo campo, los dominios dipolares quedan alineados permanentemente, generando una <strong>polarización remanente (<span class="sci-var">P<sub>r</sub></span>)</strong>.</li>
+                                        <li><strong>Alineamiento Dielectroforético:</strong> Orientación direccional de nanofibras o nanotubos dentro de matrices líquidas antes de su gelificación.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Hasta <span class="sci-unit">10 kV DC</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Poling de PVDF / <span class="sci-unit">BaTiO<sub>3</sub></span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Campo <span class="sci-var">E<sub>p</sub></span> (<span class="sci-unit">kV/mm</span>)</span>
+                            </div>
+                        </div>
+
+                        <!-- Medidor Piezoeléctrico d33 YE2730A -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 block">Sinocera Piezotronics · Método Berlincourt</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-wave-square text-indigo-600"></i> Medidor de Constante Piezoeléctrica <span class="sci-var">d<sub>33</sub></span> (YE2730A)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-indigo-100 text-indigo-800 rounded-md shrink-0">110 Hz · 0.25 N</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Medidor directo del coeficiente piezoeléctrico basado en el método dinámico de Berlincourt. Aplica una fuerza mecánica oscilatoria fija de <strong><span class="sci-unit">0.25 N</span> a una frecuencia de <span class="sci-unit">110 Hz</span></strong> mediante un agitador electromagnético calibrado. Dos rangos de sensibilidad: <span class="sci-unit">1 a 2000 pC/N</span> (resolución <span class="sci-unit">1 pC/N</span>) y <span class="sci-unit">0.1 a 200 pC/N</span> (resolución <span class="sci-unit">0.1 pC/N</span>, ideal para polímeros).</p>
+
+                                <div class="eq-box">
+                                    <div><span class="sci-var">d<sub>33</sub></span> (<span class="sci-unit">pC/N</span>) = <span class=" text-base">(</span><span class="math-frac"><span class="math-frac-num">∂D<sub>3</sub></span><span class="math-frac-den">∂T<sub>3</sub></span></span><span class="text-base">)</span><sub><span class="sci-var">E</span></sub> = <span class="math-frac"><span class="math-frac-num">Q (Carga eléctrica generada)</span><span class="math-frac-den">F (Fuerza mecánica dinámica)</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">g<sub>33</sub></span> = <span class="math-frac"><span class="math-frac-num">d<sub>33</sub></span><span class="math-frac-den">ε<sub>0</sub> · ε<sub>r</sub></span></span></div>
+                                </div>
+
+                                <div class="bg-indigo-50/90 p-3.5 rounded-lg border border-indigo-200/80 my-3">
+                                    <p class="text-xs text-indigo-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-indigo-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-indigo-950 spec-list">
+                                        <li><strong>Coeficiente Piezoeléctrico Longitudinal (<span class="sci-var">d<sub>33</sub></span>):</strong> Cuantifica los picoculombios de carga superficial generados en la dirección de polarización (eje 3) por cada Newton de fuerza aplicada en ese mismo eje.</li>
+                                        <li><strong>Verificación de Polaridad y Eficacia del Poling:</strong> Permite comprobar al instante si el proceso de polarización en la fuente Heinzinger ha sido efectivo, además de calcular el coeficiente de voltaje piezoeléctrico (<span class="sci-var">g<sub>33</sub></span>) para aplicaciones de <em>Energy Harvesting</em> y sensores táctiles.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Constante <span class="sci-var">d<sub>33</sub></span> (<span class="sci-unit">pC/N</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Resolución <span class="sci-unit">0.1 pC/N</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Energy Harvesting</span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <!-- ========================================== -->
+                <!-- BLOQUE 4: Síntesis Química, Evaporación y Fotopolimerización -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-emerald-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-sm shadow-sm">4</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Síntesis Química, Evaporación Rotatoria y Fotopolimerización UV</h4>
+                            <p class="text-xs text-slate-500 font-medium">Policondensación de alta viscosidad, eliminación de disolventes a presión reducida y reticulación fotoquímica.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- Reactor Premex Redjaro -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">Premex Reactor AG · Lab. 102</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-flask text-emerald-600"></i> Reactor de Síntesis Premex Redjaro</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 rounded-md shrink-0">20–90 N·cm / 300 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Acoplamiento magnético cónico de agitación con motor integrado para reactores de vidrio con junta esmerilada <strong>NS 29/32</strong> y doble junta tórica (O-ring) para estanqueidad absoluta bajo vacío o atmósfera inerte. Ofrece un elevado par de giro (<strong>Torque: <span class="sci-unit">20–90 N·cm</span></strong>) y soporta hasta <strong><span class="sci-unit">300 °C</span></strong>.</p>
+
+                                <div class="eq-box">
+                                    <div>Grado de Polimerización (Ecuación de Carothers): <span class="sci-var">X<sub>n</sub></span> = <span class="math-frac"><span class="math-frac-num">1</span><span class="math-frac-den">1 − p</span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div><span class="sci-var">P<sub>mec</sub></span> = <span class="sci-var">M<sub>torque</sub></span> · <span class="sci-var">ω</span></div>
+                                </div>
+
+                                <div class="bg-emerald-50/90 p-3.5 rounded-lg border border-emerald-200/80 my-3">
+                                    <p class="text-xs text-emerald-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-emerald-600 mr-1"></i> ¿Qué se logra y observa con el equipo?:</p>
+                                    <ul class="text-xs text-emerald-950 spec-list">
+                                        <li><strong>Policondensación de Alta Viscosidad y Síntesis de Resinas:</strong> Mantiene una agitación mecánica constante y sin fugas a medida que el peso molecular (<span class="sci-var">M<sub>n</sub></span>) y la viscosidad del polímero crecen exponencialmente.</li>
+                                        <li><strong>Desplazamiento del Equilibrio Químico:</strong> Su estanqueidad bajo vacío permite extraer subproductos volátiles de condensación (ej. <span class="sci-unit">H<sub>2</sub>O</span>), forzando conversiones (<span class="sci-var">p → 1</span>) para alcanzar altos pesos moleculares.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Torque <span class="sci-unit">20–90 N·cm</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Estanco a Vacío (NS 29/32)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Policondensación</span>
+                            </div>
+                        </div>
+
+                        <!-- Rotavapor 1 (Lab 233) -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">IKA® + Vacuubrand · Lab. 233</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-rotate text-emerald-600"></i> Rotavapor 1 (IKA RV 3 V eco - Presión Moderada)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 rounded-md shrink-0">Vacío 2 mbar</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Accionamiento IKA RV 3 eco (<span class="sci-unit">20–300 rpm</span>, elevación manual), baño calefactor digital HB eco S099 (<span class="sci-unit">4 L</span>, <span class="sci-unit">RT a 99 °C</span>), vidriería vertical RV 10.1 con condensador de serpentín de <span class="sci-unit">1,500 cm<sup>2</sup></span> refrigerado por agua y <strong>bomba de vacío de diafragma Vacuubrand MD 1 C</strong> (<span class="sci-unit">1.2–1.4 m<sup>3</sup>/h</span>, vacío final <span class="sci-unit">2 mbar</span>).</p>
+
+                                <div class="eq-box">
+                                    <div>Clausius-Clapeyron: ln<span class=" text-base">(</span><span class="math-frac"><span class="math-frac-num">P<sub>2</sub></span><span class="math-frac-den">P<sub>1</sub></span></span><span class="text-base">)</span> = − <span class="math-frac"><span class="math-frac-num">ΔH<sub>vap</sub></span><span class="math-frac-den">R</span></span> · <span class=" text-base">(</span><span class="math-frac"><span class="math-frac-num">1</span><span class="math-frac-den">T<sub>2</sub></span></span> − <span class="math-frac"><span class="math-frac-num">1</span><span class="math-frac-den">T<sub>1</sub></span></span><span class="text-base">)</span></div>
+                                </div>
+
+                                <div class="bg-emerald-50/90 p-3.5 rounded-lg border border-emerald-200/80 my-3">
+                                    <p class="text-xs text-emerald-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-emerald-600 mr-1"></i> ¿Para qué disolventes y procesos está diseñado?:</p>
+                                    <ul class="text-xs text-emerald-950 spec-list">
+                                        <li><strong>Disolventes de Punto de Ebullición Bajo a Medio:</strong> Ideal para evaporar rápidamente acetona, diclorometano (DCM), THF, cloroformo, metanol o etanol a bajas temperaturas (<span class="sci-unit">30–50 °C</span>), protegiendo polímeros o monómeros termosensibles.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Lab. 233</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Bomba Vacuubrand (<span class="sci-unit">2 mbar</span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Solventes P.E. Bajo/Medio</span>
+                            </div>
+                        </div>
+
+                        <!-- Rotavapor 2 (Lab 102) -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">IKA® + Chiller RC 2 lite · Lab. 102</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-arrows-rotate text-emerald-600"></i> Rotavapor 2 (IKA RV 3 V eco + Chiller y Control VC 10)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 rounded-md shrink-0">Control Vacío Digital</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Sistema avanzado con accionamiento RV 3 eco (<span class="sci-unit">20–300 rpm</span>), baño HB eco (<span class="sci-unit">RT–99 °C</span>), <strong>bomba VACSTAR lite</strong> (<span class="sci-unit">1.0 m<sup>3</sup>/h</span>, <span class="sci-unit">9 mbar</span>), <strong>controlador digital de vacío VC 10 lite</strong> y <strong>refrigerador de recirculación (Chiller) RC 2 lite</strong> con mezcla agua:etilenglicol (Thermal G) en condensador de <span class="sci-unit">1,500 cm<sup>2</sup></span>.</p>
+
+                                <div class="bg-emerald-50/90 p-3.5 rounded-lg border border-emerald-200/80 my-3">
+                                    <p class="text-xs text-emerald-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-emerald-600 mr-1"></i> ¿Para qué disolventes y procesos está diseñado?:</p>
+                                    <ul class="text-xs text-emerald-950 spec-list">
+                                        <li><strong>Disolventes de Punto de Ebullición Medio a Alto:</strong> Gracias al chiller de glicol a baja temperatura y al control electrónico exacto de la presión en milibares (VC 10 lite), permite destilar sin proyecciones (bumping) disolventes pesados como <strong>DMF, tolueno, agua, 1,4-dioxano o xileno</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Lab. 102</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Controlador VC 10 lite</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Chiller Agua:Glicol</span>
+                            </div>
+                        </div>
+
+                        <!-- Cámara de Reticulación UV Bio-Link -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">Vilber Lourmat · Fotopolimerización</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-sun text-emerald-600"></i> Cámara de Reticulación UV 'BIO-LINK' BLX-365</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 rounded-md shrink-0">365 nm (5 × 8W)</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Sistema cerrado de irradiación ultravioleta controlado por microprocesador, equipado con un banco de <strong>5 lámparas UV BLX-365 de <span class="sci-unit">8 W</span> cada una (<span class="sci-unit">40 W</span> totales) centradas en <span class="sci-unit">λ = 365 nm</span> (UV-A)</strong>. Permite programar exposiciones por dosis de energía radiante (<span class="sci-unit">Joules/cm<sup>2</sup></span>) o por tiempo.</p>
+
+                                <div class="eq-box">
+                                    <div>Dosis de Exposición UV: <span class="sci-var">E<sub>dosis</sub></span> (<span class="sci-unit">J/cm<sup>2</sup></span>) = <span class="sci-var">I<sub>UV</sub></span> (<span class="sci-unit">W/cm<sup>2</sup></span>) × <span class="sci-var">t</span> (<span class="sci-unit">s</span>)</div>
+                                </div>
+
+                                <div class="bg-emerald-50/90 p-3.5 rounded-lg border border-emerald-200/80 my-3">
+                                    <p class="text-xs text-emerald-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-emerald-600 mr-1"></i> ¿Qué se logra y observa con el equipo?:</p>
+                                    <ul class="text-xs text-emerald-950 spec-list">
+                                        <li><strong>Fotocurado y Reticulación (Cross-linking):</strong> Escisión homolítica de fotoiniciadores a <span class="sci-unit">365 nm</span> para el curado rápido de resinas acrílicas, tiol-eno y siliconas modificadas, así como reticulación de membranas poliméricas e hidrogeles.</li>
+                                        <li><strong>Activación Fotoquímica:</strong> Inducción de reacciones reversibles (ej. cicloadición de antraceno o cumarina) y ensayos de envejecimiento bajo radiación UV-A.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Longitud onda <span class="sci-unit">365 nm</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Control en <span class="sci-unit">J/cm<sup>2</sup></span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Fotocurado de Resinas</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- BLOQUE 5: Procesamiento, Dispersión y Preparación de Muestras -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-purple-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-black text-sm shadow-sm">5</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Procesamiento, Dispersión y Preparación de Muestras</h4>
+                            <p class="text-xs text-slate-500 font-medium">Mezcla centrífuga planetaria, cavitación ultrasónica de alta potencia, criomolienda y troquelado ISO/ASTM.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- SpeedMixer DAC 150.1 FVZ-K -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">Hauschild Engineering · Lab. 101</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-blender text-purple-600"></i> SpeedMixer™ DAC 150.1 FVZ-K</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">Hasta 3500 RPM</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Mezcladora centrífuga asimétrica dual sin aspas con velocidad regulable hasta <strong><span class="sci-unit">3,500 rpm</span></strong> y capacidad de carga de hasta <strong><span class="sci-unit">150 g</span></strong>. Combina rotación planetaria a alta velocidad en sentidos opuestos.</p>
+
+                                <div class="eq-box">
+                                    <div>Fuerza Centrífuga Relativa: <span class="sci-var">RCF</span> (<span class="sci-var">g</span>) = <span class="sci-unit">1.118 × 10<sup>−5</sup></span> · <span class="sci-var">r</span> (<span class="sci-unit">cm</span>) · (<span class="sci-unit">RPM</span>)<sup>2</sup></div>
+                                </div>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Homogeneización y Desgasificación Simultánea:</strong> Dispersa cargas micrométricas y nanométricas en siliconas (PDMS), epoxis y pastas de alta viscosidad en pocos minutos, expulsando las microburbujas de aire por fuerza centrífuga sin pérdidas de material en varillas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">DAC 150.1 FVZ-K</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">3500 RPM / 150 g</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Mezcla sin Burbujas</span>
+                            </div>
+                        </div>
+
+                        <!-- Sonics VCX-750 -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">Sonics & Materials · Cavitación Acústica</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-bolt-lightning text-purple-600"></i> Procesador Ultrasónico Sonics VCX-750 Vibr-Cell</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">750 W · 20 kHz</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Sonicador de punta de alta intensidad con potencia de <strong><span class="sci-unit">750 W</span></strong> y frecuencia ultrasónica de <strong><span class="sci-unit">20 kHz</span></strong>. Sonda de aleación de titanio (<span class="sci-unit">Ti-6Al-4V</span>, <span class="sci-unit">Ø 13 mm</span>), control de amplitud (<span class="sci-unit">20–100%</span>) y generador de pulsos programable (<span class="sci-var">t<sub>ON</sub> / t<sub>OFF</sub></span>).</p>
+
+                                <div class="eq-box">
+                                    <div>Energía Acústica Entregada: <span class="sci-var">E<sub>son</sub></span> (<span class="sci-unit">J</span>) = <span class="sci-var">P<sub>efectiva</sub></span> (<span class="sci-unit">W</span>) × <span class="sci-var">t<sub>ON</sub></span> (<span class="sci-unit">s</span>)</div>
+                                </div>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Exfoliación y Desaglomeración de Nanocargas:</strong> La implosión de microburbujas de cavitación genera micro-chorros de alta cizalla capaces de vencer las fuerzas de Van der Waals que mantienen unidos los haces de nanotubos de carbono (CNT) o láminas de grafeno.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">750 W / 20 kHz</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Modo Pulser ON/OFF</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Exfoliación CNT / Grafeno</span>
+                            </div>
+                        </div>
+
+                        <!-- Baño de Ultrasonidos Elmasonic P -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">Elma Schmidbauer · Doble Frecuencia</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-water text-purple-600"></i> Baño de Ultrasonidos Elmasonic P</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">37 / 80 kHz · 80 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Baño ultrasónico multifrecuencia conmutable entre <strong><span class="sci-unit">37 kHz</span></strong> (alta energía para dispersión y desgasificación) y <strong><span class="sci-unit">80 kHz</span></strong> (onda suave y silenciosa para capilares y muestras delicadas), calefacción integrada hasta <span class="sci-unit">80 °C</span> y modos <em>Pulse, Sweep y Degas</em>.</p>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Dispersión No Destructiva y Modo Degas:</strong> Homogeneiza suspensiones coloidales en viales cerrados sin acortar la longitud de los nanotubos ni contaminar con partículas de titanio de sonda, además de eliminar gases disueltos en disolventes.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Doble Frecuencia <span class="sci-unit">37 / 80 kHz</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Modo Degas / Pulse</span>
+                            </div>
+                        </div>
+
+                        <!-- Criomolienda Retsch CryoMill -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">Retsch GmbH · Pulverización Criogénica</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-snowflake text-purple-600"></i> Molino Criogénico Retsch CryoMill</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">-196 °C · 30 Hz</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Molino vibratorio de bolas con sistema integrado de autofllenado continuo de nitrógeno líquido (<span class="sci-unit">LN<sub>2</sub></span> a <strong><span class="sci-unit">-196 °C</span></strong>) que refrigera externamente el tarro de molienda antes y durante el impacto (frecuencia de oscilación radial de <strong><span class="sci-unit">5 a 30 Hz</span></strong>).</p>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Fragilización bajo <span class="sci-var">T<sub>g</sub></span> (<span class="sci-var">T = -196 °C &lt;&lt; T<sub>g</sub></span>):</strong> Permite pulverizar elastómeros, termoplásticos dúctiles y nanocompuestos hasta polvo micrométrico ultrafino sin sufrir fusión ni degradación térmica, y realizar mezclado mecanoquímico en estado sólido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Retsch CryoMill</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Nitrógeno Líquido <span class="sci-unit">-196 °C</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">5 – 30 Hz</span>
+                            </div>
+                        </div>
+
+                        <!-- Troqueladora CEAST -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">CEAST / Instron · Corte de Probetas</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-scissors text-purple-600"></i> Troqueladora Manual Universal CEAST</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">ISO 527 / ASTM D638</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Prensa de troquelado de palanca multiplicadora de fuerza provista de cuchillas intercambiables de acero templado con geometrías normalizadas de hueso de perro (<em>dog-bone</em>) y tiras rectangulares.</p>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Estandarización Geométrica (<span class="sci-var">L<sub>0</sub>, w, d</span>):</strong> Garantiza probetas con sección transversal constante y bordes libres de micro-entallas para que la rotura en la Instron ocurra exclusivamente dentro de la longitud calibrada (<span class="sci-var">L<sub>0</sub></span>).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Probetas Dog-bone</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">ISO 527 / ASTM D638</span>
+                            </div>
+                        </div>
+
+                        <!-- Impresora 3D -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-purple-600 block">Fabricación Aditiva · Prototipado</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-cubes text-purple-600"></i> Impresora 3D FFF / FDM</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-purple-100 text-purple-800 rounded-md shrink-0">CAD / Metamateriales</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Sistema de fabricación con filamento fundido (FFF) con control de temperatura de extrusor (<span class="sci-unit">hasta 260–300 °C</span>), cama calefactada y patrones de relleno configurables.</p>
+
+                                <div class="bg-purple-50/90 p-3.5 rounded-lg border border-purple-200/80 my-3">
+                                    <p class="text-xs text-purple-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-purple-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-purple-950 spec-list">
+                                        <li><strong>Impresión de Filamentos Funcionales y Utillaje:</strong> Manufactura de probetas con arquitecturas porosas controladas, sensores impresos (PLA/CNT, PVDF) y moldes personalizados para colada de siliconas o resinas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Modelado FFF / FDM</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Moldes y Probetas</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- BLOQUE 6: Tratamiento Térmico, Curado y Hornos -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-red-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center font-black text-sm shadow-sm">6</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Tratamiento Térmico, Curado y Hornos</h4>
+                            <p class="text-xs text-slate-500 font-medium">Calcinación en mufla, pirólisis en atmósfera inerte y ciclos de curado/post-curado en estufas de convección.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- Horno Mufla Carbolite CWF 1200 -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-red-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-red-600 block">Carbolite Gero · Calcinación</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-fire text-red-600"></i> Horno Mufla Carbolite CWF 1200</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-red-100 text-red-800 rounded-md shrink-0">Máx. 1200 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Horno mufla de cámara refractaria con controlador digital de rampas y segmentos PID, capaz de operar hasta <strong><span class="sci-unit">1,200 °C</span></strong> en atmósfera oxidante (aire).</p>
+
+                                <div class="eq-box">
+                                    <div>Fracción en Peso de Fibra / Carga: <span class="sci-var">W<sub>f</sub></span> (wt%) = <span class="math-frac"><span class="math-frac-num">m<sub>final</sub> − m<sub>crisol</sub></span><span class="math-frac-den">m<sub>inicial</sub> − m<sub>crisol</sub></span></span> × 100</div>
+                                </div>
+
+                                <div class="bg-red-50/90 p-3.5 rounded-lg border border-red-200/80 my-3">
+                                    <p class="text-xs text-red-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-red-600 mr-1"></i> ¿Qué se observa y determina con el equipo?:</p>
+                                    <ul class="text-xs text-red-950 spec-list">
+                                        <li><strong>Determinación de Contenido en Fibra/Carga Inorgánica (Burn-off, ASTM D2584):</strong> Calcinación completa de la matriz polimérica (típicamente a <span class="sci-unit">565–625 °C</span>) para pesar el residuo inorgánico intacto (fibra de vidrio, sílice, <span class="sci-unit">BaTiO<sub>3</sub></span>).</li>
+                                        <li><strong>Sinterizado Cerámico y Tratamientos Térmicos:</strong> Síntesis y densificación de óxidos cerámicos a alta temperatura.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Carbolite CWF 1200</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Fracción Fibra (<span class="sci-var">W<sub>f</sub></span>)</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Hasta <span class="sci-unit">1200 °C</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Horno Tubular Carbolite -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-red-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-red-600 block">Carbolite Gero · Atmósfera Controlada</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-fire-burner text-red-600"></i> Horno Tubular Carbolite Gero</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-red-100 text-red-800 rounded-md shrink-0">N<sub>2</sub> / Ar / Vacío</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Horno cilíndrico de alta temperatura provisto de tubo de trabajo de cuarzo/alúmina y bridas de sellado con caudalímetros para purga continua de gases inertes (<strong>Nitrógeno <span class="sci-unit">N<sub>2</sub></span>, Argón <span class="sci-unit">Ar</span></strong>) o conexión a bomba de vacío.</p>
+
+                                <div class="bg-red-50/90 p-3.5 rounded-lg border border-red-200/80 my-3">
+                                    <p class="text-xs text-red-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-red-600 mr-1"></i> ¿Qué se logra con el equipo?:</p>
+                                    <ul class="text-xs text-red-950 spec-list">
+                                        <li><strong>Pirólisis y Carbonización sin Oxidación:</strong> Al operar en ausencia total de oxígeno, permite carbonizar precursores poliméricos, reducir térmicamente óxido de grafeno a grafeno reducido (rGO) y tratar fibras de carbono sin pérdida de masa por combustión.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Atmósfera Inerte <span class="sci-unit">N<sub>2</sub> / Ar</span></span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Pirólisis y Reducción rGO</span>
+                            </div>
+                        </div>
+
+                        <!-- Estufas Memmert / Binder (101, 036, 027) -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:col-span-2 flex flex-col justify-between hover:border-red-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-red-600 block">Memmert UF55 / Binder FD · Laboratorios 101, 036 y 027</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-temperature-arrow-up text-red-600"></i> Estufas de Convección Forzada (Estufa 101, Estufa 036 y Estufa 027)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-red-100 text-red-800 rounded-md shrink-0">RT a 300 °C</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Cámaras térmicas de precisión con circulación de aire por turbina (convección forzada), regulación electrónica PID de rampas y tiro de ventilación ajustable (rango desde <span class="sci-unit">+10 °C sobre ambiente hasta 300 °C</span>).</p>
+
+                                <div class="bg-red-50/90 p-3.5 rounded-lg border border-red-200/80 my-3">
+                                    <p class="text-xs text-red-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-red-600 mr-1"></i> ¿Para qué se utilizan en el laboratorio?:</p>
+                                    <ul class="text-xs text-red-950 spec-list">
+                                        <li><strong>Ciclos de Curado y Post-Curado:</strong> Reticulación térmica de matrices epoxi, siliconas y poliuretanos. El escalón de post-curado por encima de la <span class="sci-var">T<sub>g,∞</sub></span> libera segmentos atrapados en estado vítreo para alcanzar una conversión <span class="sci-var">α ≈ 100%</span>.</li>
+                                        <li><strong>Secado Previo y Desorción de Humedad:</strong> Eliminación de agua absorbida en polímeros higroscópicos (poliamidas, PVDF, PLA) y cargas antes del procesado para evitar hidrólisis y porosidad.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Memmert UF55 / Binder</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Curado y Post-Curado</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Hasta <span class="sci-unit">300 °C</span></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- BLOQUE 7: Cabinas de Extracción de Gases y Desgasificación a Vacío -->
+                <!-- ========================================== -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3 border-b-2 border-teal-400 pb-2.5">
+                        <span class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-black text-sm shadow-sm">7</span>
+                        <div>
+                            <h4 class="font-black text-slate-900 text-base md:text-lg uppercase tracking-wide">Vitrinas de Extracción de Gases y Cámaras de Vacío</h4>
+                            <p class="text-xs text-slate-500 font-medium">Contención certificada frente a vapores orgánicos (UNE-EN 14175) y desgasificación a vacío de resinas.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- Vitrinas de Gases Waldner / Burdinola -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-teal-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-teal-600 block">Certificación UNE-EN 14175 · Labs 027, 101 y 102</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-wind text-teal-600"></i> Vitrinas de Extracción de Gases (Labs 027, 101 y 102)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-teal-100 text-teal-800 rounded-md shrink-0">v<sub>facial</sub> ≈ 0.5 m/s</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Vitrinas químicas de contención aerodinámica con guillotina frontal de vidrio templado de seguridad, deflectores traseros de aspiración laminar y monitor de flujo continuo certificadas bajo norma <strong>UNE-EN 14175</strong> (velocidad facial de entrada <span class="sci-var">v<sub>f</sub></span> ≈ <span class="sci-unit">0.5 m/s</span>, caudal de extracción <span class="sci-unit">700–1,000 m<sup>3</sup>/h</span>).</p>
+
+                                <div class="bg-teal-50/90 p-3.5 rounded-lg border border-teal-200/80 my-3">
+                                    <p class="text-xs text-teal-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-teal-600 mr-1"></i> ¿Para qué operaciones son de uso obligatorio?:</p>
+                                    <ul class="text-xs text-teal-950 spec-list">
+                                        <li><strong>Manipulación de Disolventes Orgánicos Volátiles (COV) y Monómeros:</strong> Trasvase y evaporación (<em>solvent casting</em>) de THF, cloroformo, DMF, acetona, tolueno, estireno o endurecedores amínicos.</li>
+                                        <li><strong>Pesaje y Dispersión de Nanopartículas en Polvo:</strong> Evita la inhalación de aerosoles de nanotubos de carbono (CNT), grafeno o sílice pirogénica.</li>
+                                        <li><strong>Ataques Ácidos y Funcionalización Superficial:</strong> Oxidación ácida (<span class="sci-unit">HNO<sub>3</sub> / H<sub>2</sub>SO<sub>4</sub></span>) y silanización de refuerzos.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">UNE-EN 14175</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Extracción COV y Nanopartículas</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Labs 027 / 101 / 102</span>
+                            </div>
+                        </div>
+
+                        <!-- Cámara de Desgasificación a Vacío (Quesera) -->
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-teal-400 smooth-transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2 mb-3">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-teal-600 block">Campana de Vacío en Policarbonato / Acrílico</span>
+                                        <h5 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-flask-vial text-teal-600"></i> Cámara de Desgasificación a Vacío (Quesera)</h5>
+                                    </div>
+                                    <span class="px-2.5 py-1 text-[10px] font-black uppercase bg-teal-100 text-teal-800 rounded-md shrink-0">Desgasificado Vacío</span>
+                                </div>
+
+                                <p class="text-xs text-slate-600 mb-2"><strong><i class="fa-solid fa-gears text-slate-400 mr-1"></i> Especificaciones Técnicas:</strong> Campana hermética transparente de pared gruesa con junta de sellado elastomérica, vacuómetro analógico/digital, válvula de venteo controlado y conexión a bomba de vacío para desgasificación estática.</p>
+
+                                <div class="eq-box">
+                                    <div>Ley de Boyle (Expansión de burbuja): <span class="sci-var">V<sub>2</sub></span> = <span class="sci-var">V<sub>1</sub></span> · <span class="math-frac"><span class="math-frac-num">P<sub>atm</sub></span><span class="math-frac-den">P<sub>vacío</sub></span></span></div>
+                                    <div class="text-slate-300">|</div>
+                                    <div>Velocidad ascenso (Stokes): <span class="sci-var">v<sub>s</sub></span> = <span class="math-frac"><span class="math-frac-num">2 · g · r<sup>2</sup> · Δρ</span><span class="math-frac-den">9 · η</span></span></div>
+                                </div>
+
+                                <div class="bg-teal-50/90 p-3.5 rounded-lg border border-teal-200/80 my-3">
+                                    <p class="text-xs text-teal-950 font-bold mb-1.5"><i class="fa-solid fa-eye text-teal-600 mr-1"></i> ¿Qué fenómeno físico se observa y logra?:</p>
+                                    <ul class="text-xs text-teal-950 spec-list">
+                                        <li><strong>Eliminación Total de Microburbujas antes del Curado:</strong> Al reducir la presión (<span class="sci-var">P<sub>vacío</sub> ≪ P<sub>atm</sub></span>), el radio (<span class="sci-var">r</span>) de las microburbujas atrapadas en la resina o silicona se multiplica. Según la ley de Stokes, la velocidad de ascenso hacia la superficie crece con el cuadrado del radio (<span class="sci-var">v<sub>s</sub> ∝ r<sup>2</sup></span>), logrando coladas y películas libres de poros (<span class="sci-var">V<sub>v</sub> → 0%</span>).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Ley de Boyle / Stokes</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-bold">Coladas sin Poros (<span class="sci-var">V<sub>v</sub> ≈ 0</span>)</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-            <div class="px-6 py-4 border-t border-slate-100 flex justify-end bg-slate-50">
-                <button onclick="app.closeNormativa()" class="px-6 py-2.5 text-sm font-bold rounded-lg text-white bg-blue-600 shadow-md hover:bg-blue-700 active:scale-95 smooth-transition">He leído y acepto la normativa</button>
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-between items-center bg-white flex-none">
+                <span class="text-xs font-bold text-slate-400 hidden sm:inline"><i class="fa-solid fa-circle-check text-indigo-500 mr-1"></i> 31 Equipos científicos distribuidos en 7 áreas de investigación (PCG)</span>
+                <button onclick="app.closeTecnicas()" class="px-6 py-2.5 text-sm font-bold rounded-xl text-white bg-indigo-600 shadow-md hover:bg-indigo-700 active:scale-95 smooth-transition ml-auto">Cerrar Catálogo Técnico</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NORMATIVA GENERAL Y PROTOCOLOS DE SEGURIDAD (PCG) -->
+    <div id="normativaModal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 md:p-6">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl overflow-hidden transform scale-95 opacity-0 smooth-transition flex flex-col max-h-[92vh]" id="normativaContent">
+            
+            <!-- Cabecera del Modal -->
+            <div class="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white flex-none">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-xl bg-red-600 text-white flex items-center justify-center text-xl shadow-md border border-red-400/30">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 bg-red-500/20 border border-red-400/40 text-red-200 text-[10px] font-black uppercase tracking-widest rounded">De Cumplimiento Obligatorio</span>
+                            <span class="text-[11px] text-slate-300 font-semibold hidden sm:inline">Labs 027 · 036 · 101 · 102 · 233</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-black text-white uppercase tracking-tight mt-0.5">Reglamento de Régimen Interno y Seguridad (PCG)</h3>
+                    </div>
+                </div>
+                <button onclick="app.closeNormativa()" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white smooth-transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Cuerpo de la Normativa -->
+            <div class="p-6 md:p-8 space-y-8 text-sm text-slate-700 overflow-y-auto leading-relaxed bg-slate-50/80 flex-1">
+                
+                <!-- Banner de Aviso Crítico -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex items-start gap-3.5">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
+                    <div class="text-xs text-amber-950 leading-relaxed">
+                        <p class="font-black uppercase tracking-wide text-amber-900 mb-0.5">Responsabilidad del Investigador y Trazabilidad Cloud</p>
+                        Toda reserva registrada en esta plataforma vincula legal y operativamente al investigador identificado mediante su PIN personal con el estado del equipo durante dicha franja horaria. El desconocimiento de estas normas no exime de su cumplimiento.
+                    </div>
+                </div>
+
+                <!-- Grid de Secciones Normativas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    <!-- SECCIÓN I: GESTIÓN DE RESERVAS -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-xs">I</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Protocolo de Reservas y Uso de Turnos</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>1.1. Identidad personal e intransferible:</strong> Cada investigador debe operar exclusivamente bajo su perfil y PIN de 4 dígitos. Queda terminantemente prohibido reservar en nombre de terceros o compartir credenciales.</li>
+                                <li><strong>1.2. Integridad de datos técnicos:</strong> Es obligatorio completar con rigor todos los campos del formulario de reserva (<em>nombre real de la muestra/proyecto, rampa térmica, disolventes, célula de carga o nivel de vacío</em>). Reservas con textos genéricos ("test", "aaa", "muestra") serán anuladas sin previo aviso.</li>
+                                <li><strong>1.3. Tolerancia de retraso (Regla de los 20 min):</strong> Si transcurridos <span class="sci-unit">20 minutos</span> desde el inicio del turno el investigador no se ha presentado ni ha notificado retraso, cualquier otro miembro del grupo podrá disponer del equipo.</li>
+                                <li><strong>1.4. Liberación inmediata y penalización por "reservas fantasma":</strong> Si un ensayo o síntesis finaliza antes de la hora prevista, es obligatorio borrar las franjas sobrantes en la nube. El acaparamiento preventivo de horas sin uso real conllevará la suspensión temporal de permisos.</li>
+                                <li><strong>1.5. Tiempo de enfriamiento e inercia térmica:</strong> En equipos como el <strong>DSC, Reómetro HR-2, Prensa DEA, Mufla CWF 1200, Horno Tubular o Estufas</strong>, la reserva debe incluir los <span class="sci-unit">20–30 min</span> necesarios para que el horno regrese a temperatura segura (<span class="sci-unit">&lt; 50 °C</span>) y se realice la limpieza.</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-blue-700">
+                            <span><i class="fa-solid fa-clock-rotate-left mr-1"></i> Puntualidad y optimización</span>
+                            <span class="bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Tolerancia máx: 20 min</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN II: EPIS Y SEGURIDAD PERSONAL -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-xs">II</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Equipos de Protección Individual (EPIs) y Acceso</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>2.1. Vestimenta obligatoria en planta:</strong> Para permanecer o trabajar en los laboratorios (<span class="sci-unit">027, 036, 101, 102 y 233</span>) es indispensable portar <strong>bata de laboratorio abrochada</strong> (100% algodón o ignífuga), <strong>gafas de seguridad homologadas</strong> (EN 166), pantalón largo y <strong>calzado cerrado</strong> de suela antideslizante.</li>
+                                <li><strong>2.2. Cabello largo y elementos colgantes:</strong> Al operar equipos rotatorios o de tracción (<strong>Reómetro, Viscosímetro Brookfield, Rotavapores, Premex Redjaro, Instron o Troqueladora</strong>), es obligatorio llevar el pelo recogido y retirar anillos, pulseras o cordones sueltos por riesgo de atrapamiento mecánico.</li>
+                                <li><strong>2.3. Guantes específicos según riesgo:</strong>
+                                    <div class="grid grid-cols-2 gap-1.5 mt-1.5 text-[11px]">
+                                        <div class="bg-slate-50 p-1.5 rounded border border-slate-200"><strong>Nitrilo / Neopreno:</strong> Manejo de resinas epoxi, aminas, silanos y solventes (quitarse los guantes antes de tocar teclados o pomos).</div>
+                                        <div class="bg-slate-50 p-1.5 rounded border border-slate-200"><strong>Térmicos (Kevlar/Nomex):</strong> Extracción de crisoles y moldes en Mufla (<span class="sci-unit">1200 °C</span>), Horno Tubular y Estufas.</div>
+                                        <div class="bg-slate-50 p-1.5 rounded border border-slate-200"><strong>Criogénicos + Pantalla Facial:</strong> Trasvase de <span class="sci-unit">LN<sub>2</sub> (-196 °C)</span> en Retsch CryoMill y trampas frías.</div>
+                                        <div class="bg-slate-50 p-1.5 rounded border border-slate-200"><strong>Protección Auditiva:</strong> Obligatoria durante el uso del procesador ultrasónico <strong>Sonics VCX-750</strong> si se opera con puerta entreabierta.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-700">
+                            <span><i class="fa-solid fa-user-shield mr-1"></i> Prohibido comer, beber o usar lentillas sin gafa estanca</span>
+                            <span class="bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Norma EN 166 / EN 374</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN III: NANOSEGURIDAD Y VITRINAS QUÍMICAS -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center font-black text-xs">III</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Higiene Química, Nanomateriales y Extracción</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>3.1. Protocolo de Nanoseguridad (CNT, Grafeno, MXenos, Nanopartículas):</strong> Todo pesaje y trasvase de cargas nanométricas en polvo seco debe efectuarse <strong>exclusivamente dentro de las Vitrinas de Extracción (UNE-EN 14175)</strong> utilizando mascarilla autofiltrante <strong>FFP3</strong> y doble guante de nitrilo. Se limpiarán las superficies con paño húmedo (nunca barrer ni soplar con aire comprimido).</li>
+                                <li><strong>3.2. Compuestos Orgánicos Volátiles (COV) y Monómeros:</strong> La manipulación de THF, DMF, cloroformo, diclorometano, tolueno, acetona, ácidos minerales (<span class="sci-unit">HNO<sub>3</sub>/H<sub>2</sub>SO<sub>4</sub></span>), monómeros acrílicos y endurecedores amínicos se realizará siempre con la guillotina de la vitrina por debajo de la marca de seguridad (<span class="sci-unit">v<sub>facial</sub> ≈ 0.5 m/s</span>).</li>
+                                <li><strong>3.3. Uso correcto de los Rotavapores (Lab. 233 y Lab. 102):</strong>
+                                    <span class="block mt-1 text-[11px] bg-teal-50/70 p-2 rounded border border-teal-200 text-teal-950">
+                                        • <strong>Rotavapor 1 (Lab. 233 - Condensador de Agua):</strong> Exclusivo para solventes de punto de ebullición bajo/medio (acetona, DCM, THF, etanol).<br>
+                                        • <strong>Rotavapor 2 (Lab. 102 - Chiller Glicol + Control VC 10):</strong> Destinado a solventes de alto P.E. (DMF, tolueno, agua, dioxano). Es obligatorio vaciar el matraz colector al terminar y apagar el chiller/bomba.
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-teal-700">
+                            <span><i class="fa-solid fa-Biohazard mr-1"></i> Obligatorio FFP3 con polvo seco de CNT/Grafeno</span>
+                            <span class="bg-teal-50 px-2 py-0.5 rounded border border-teal-200">UNE-EN 14175</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN IV: RIESGOS CRÍTICOS (ALTA TENSIÓN, UV, CRIOGENIA Y MECÁNICA) -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-xs">IV</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Seguridad en Alta Tensión, Radiación UV y Mecánica</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>4.1. Fuente de Alto Voltaje Heinzinger (<span class="sci-unit">10 kV DC</span>) y SMU Keithley (<span class="sci-unit">200 V</span>):</strong> Peligro eléctrico severo. Antes de manipular electrodos o sumergir muestras en el baño de silicona de polarización (<em>poling</em>), la fuente debe estar apagada (<span class="sci-unit">0 V</span>) y se debe <strong>descargar el portamuestras a tierra</strong> con la pértiga/cable de descarga para eliminar la energía capacitiva remanente. Prohibido operar en solitario a tensiones <span class="sci-unit">&gt; 1 kV</span>.</li>
+                                <li><strong>4.2. Cámara UV 'BIO-LINK' BLX-365 (<span class="sci-unit">365 nm, 40 W</span>):</strong> Prohibido anular o forzar el enclavamiento de seguridad de la puerta. En caso de inspección visual, utilizar gafas con filtro certificado UV-A (<span class="sci-unit">λ &lt; 400 nm</span>).</li>
+                                <li><strong>4.3. Máquina Instron 3365 y Células de Carga (<span class="sci-unit">100 N, 1 kN, 5 kN</span>):</strong> Verificar siempre la capacidad nominal de la célula instalada antes de iniciar el ensayo y ajustar los <strong>topes físicos de fin de carrera</strong> en la columna para evitar la colisión de mordazas (una sobrecarga destruye irreversiblemente el transductor).</li>
+                                <li><strong>4.4. Sonicador de Sonda Sonics VCX-750 (<span class="sci-unit">750 W</span>):</strong> Nunca activar el ultrasonido con la punta de titanio en aire (daño al transductor piezoeléctrico) ni permitir que toque las paredes de vidrio del vaso.</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-indigo-700">
+                            <span><i class="fa-solid fa-bolt-lightning mr-1"></i> Descarga capacitiva obligatoria tras Poling HV</span>
+                            <span class="bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Máx. 10,000 V</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN V: ENSAYOS NOCTURNOS (OVERNIGHT) Y FINES DE SEMANA -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-orange-500 text-white flex items-center justify-center font-black text-xs">V</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Operación Continua (Overnight) y Fines de Semana</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>5.1. Equipos autorizados sin supervisión presencial:</strong> Únicamente podrán operar en horario nocturno o festivo las <strong>Estufas de Convección (101, 036, 027), Mufla, Horno Tubular, Impresora 3D, Baño Circulador y Síntesis controlada en Reactor Premex Redjaro</strong>, siempre que cuenten con reserva activa en todas las franjas afectadas.</li>
+                                <li><strong>5.2. Equipos prohibidos en modo desatendido:</strong> Queda prohibido dejar funcionando sin vigilancia presencial la <strong>Fuente de Alta Tensión Heinzinger (10 kV), el Sonicador de Punta VCX-750, los Rotavapores con solventes inflamables o la Instron</strong>.</li>
+                                <li><strong>5.3. Cartel Oficial de "Equipo en Marcha":</strong> Todo experimento nocturno debe exhibir en el frontal del equipo una ficha visible con:
+                                    <span class="block mt-1 font-semibold text-orange-950 bg-orange-50 p-2 rounded border border-orange-200 text-[11px]">
+                                        1) Nombre completo y Teléfono móvil de urgencia del investigador · 2) Naturaleza química de la muestra y peligrosidad · 3) Temperatura / Atmósfera de trabajo · 4) Fecha y hora exacta de finalización.
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-orange-700">
+                            <span><i class="fa-solid fa-moon mr-1"></i> Identificación física obligatoria en el equipo</span>
+                            <span class="bg-orange-50 px-2 py-0.5 rounded border border-orange-200">Protocolo 24/7</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN VI: LIMPIEZA, RESIDUOS Y AVERÍAS -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-3.5">
+                                <span class="w-7 h-7 rounded-lg bg-red-600 text-white flex items-center justify-center font-black text-xs">VI</span>
+                                <h4 class="font-black text-slate-900 text-sm uppercase tracking-wide">Limpieza Crítica, Gestión de Residuos y Averías</h4>
+                            </div>
+                            <ul class="space-y-2.5 text-xs text-slate-600 spec-list">
+                                <li><strong>6.1. Limpieza inmediata pre-curado:</strong> Los husillos del <strong>Viscosímetro Brookfield</strong>, los platos del <strong>Reómetro HR-2</strong>, los sensores del <strong>DEA 288 Ionic</strong>, el cabezal <strong>Premex Redjaro</strong> y la sonda del <strong>Sonics VCX-750</strong> deben limpiarse con el disolvente adecuado <em>inmediatamente después del ensayo</em> antes de que la resina gelifique o vitrifique. Dejar resina curada en un accesorio de precisión se considera falta grave.</li>
+                                <li><strong>6.2. Protección de hornos y estufas:</strong> En las estufas, mufla y cámara de vacío (Quesera), todos los moldes con silicona o resina líquida deben colocarse sobre <strong>bandejas metálicas o papel de aluminio/PTFE</strong> para evitar derrames sobre las rejillas o la base.</li>
+                                <li><strong>6.3. Segregación de Residuos Químicos:</strong> Prohibido verter disolventes, resinas o suspensiones de nanopartículas al desagüe. Utilizar los bidones homologados: <strong>Grupo I</strong> (Disolventes halogenados: cloroformo, DCM), <strong>Grupo II</strong> (No halogenados: acetona, THF, etanol, tolueno), <strong>Sólidos contaminados</strong> (guantes, pipetas, botes de SpeedMixer con restos de epoxi/CNT).</li>
+                                <li><strong>6.4. Reporte de Averías y Bloqueo Preventivo:</strong> Ante cualquier mensaje de error, rotura de vidrio o fallo de vacío, <strong>no intente desmontar el equipo</strong>. Notifíquelo de inmediato a los responsables técnicos del laboratorio PCG y anótelo en las observaciones del calendario.</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-red-700">
+                            <span><i class="fa-solid fa-recycle mr-1"></i> Tolerancia cero ante equipos sucios o con resina curada</span>
+                            <span class="bg-red-50 px-2 py-0.5 rounded border border-red-200">Gestión Ambiental</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Pie del Modal -->
+            <div class="px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3 bg-white flex-none">
+                <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
+                    <i class="fa-solid fa-file-shield text-blue-600"></i>
+                    <span>Polymer Composite Group (PCG) · Normativa vigente actualizada 2026</span>
+                </div>
+                <button onclick="app.closeNormativa()" class="w-full sm:w-auto px-6 py-2.5 text-sm font-bold rounded-xl text-white bg-blue-600 shadow-md hover:bg-blue-700 active:scale-95 smooth-transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-double"></i> He leído y acepto el reglamento
+                </button>
             </div>
         </div>
     </div>
@@ -322,37 +1491,193 @@
         const sysColors = {
             'orange': { hex: '#f97316', bg: 'bg-orange-500', text: 'text-orange-600', ring: 'ring-orange-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(249,115,22,0.3)]', badge: 'bg-orange-50 text-orange-700 border-orange-200' },
             'blue': { hex: '#3b82f6', bg: 'bg-blue-500', text: 'text-blue-600', ring: 'ring-blue-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)]', badge: 'bg-blue-50 text-blue-700 border-blue-200' },
+            'indigo': { hex: '#6366f1', bg: 'bg-indigo-500', text: 'text-indigo-600', ring: 'ring-indigo-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(99,102,241,0.3)]', badge: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+            'emerald': { hex: '#10b981', bg: 'bg-emerald-600', text: 'text-emerald-600', ring: 'ring-emerald-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.3)]', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+            'purple': { hex: '#8b5cf6', bg: 'bg-purple-500', text: 'text-purple-600', ring: 'ring-purple-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)]', badge: 'bg-purple-50 text-purple-700 border-purple-200' },
             'red': { hex: '#ef4444', bg: 'bg-red-500', text: 'text-red-600', ring: 'ring-red-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(239,68,68,0.3)]', badge: 'bg-red-50 text-red-700 border-red-200' },
-            'teal': { hex: '#14b8a6', bg: 'bg-teal-500', text: 'text-teal-600', ring: 'ring-teal-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(20,184,166,0.3)]', badge: 'bg-teal-50 text-teal-700 border-teal-200' },
-            'purple': { hex: '#8b5cf6', bg: 'bg-purple-500', text: 'text-purple-600', ring: 'ring-purple-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)]', badge: 'bg-purple-50 text-purple-700 border-purple-200' }
+            'teal': { hex: '#14b8a6', bg: 'bg-teal-600', text: 'text-teal-600', ring: 'ring-teal-500', glow: 'group-hover:shadow-[0_0_30px_-5px_rgba(20,184,166,0.3)]', badge: 'bg-teal-50 text-teal-700 border-teal-200' }
+        };
+
+        const eqFieldsConfig = {
+            'dsc': [
+                { id: 'rampa', label: 'Rampa Térmica (°C/min y rango)', type: 'text', placeholder: 'Ej. -50 a 250°C @ 10°C/min', icon: 'fa-chart-line' },
+                { id: 'atm', label: 'Gas de Purga', type: 'select', options: ['Nitrógeno (N2)', 'Aire Sintético', 'Oxígeno (O2)', 'Helio (He)'], icon: 'fa-wind' },
+                { id: 'crisol', label: 'Tipo de Crisol', type: 'select', options: ['Aluminio Estándar', 'Aluminio Hermético', 'Alúmina', 'Platino'], icon: 'fa-circle-dot' }
+            ],
+            'rheo': [
+                { id: 'geometria', label: 'Geometría Discovery HR-2', type: 'select', options: ['Platos Paralelos 25 mm', 'Platos Paralelos 40 mm', 'Platos Desechables Aluminio', 'Cono-Plato (1° / 2°, 40 mm)', 'Cilindros Concéntricos', 'Torsión Rectangular Sólida (DMA)'], icon: 'fa-compact-disc' },
+                { id: 'modo', label: 'Sistema Térmico y Modo', type: 'select', options: ['Cámara ETC (-160 a 600°C) - Oscilatorio', 'Peltier (0 a 200°C) - Flujo / Viscosidad', 'Curado Isotermo (Punto de Gel)', 'Rampa Dinámica DMA'], icon: 'fa-wave-square' },
+                { id: 'temp', label: 'Temperatura / Rango (°C)', type: 'text', placeholder: 'Ej. 120°C isotermo o -50 a 200°C @ 3°C/min', icon: 'fa-temperature-half' }
+            ],
+            'visco': [
+                { id: 'husillo', label: 'Husillo (Spindle) Brookfield', type: 'text', placeholder: 'Ej. Husillo LV-2 / RV-3', icon: 'fa-arrows-spin' },
+                { id: 'velocidad', label: 'Velocidad de Giro (0.1 - 200 RPM)', type: 'text', placeholder: 'Ej. 50 RPM o rampa 10-100 RPM', icon: 'fa-gauge-high' },
+                { id: 'temp', label: 'Temperatura RTD (°C)', type: 'text', placeholder: 'Ej. 25°C o acoplado a baño PolyScience', icon: 'fa-temperature-half' }
+            ],
+            'bano_refr': [
+                { id: 'temp_refr', label: 'Temperatura de Consigna (-20 a 200°C)', type: 'text', placeholder: 'Ej. 25.00 °C constante (±0.01°C)', icon: 'fa-temperature-low' },
+                { id: 'fluido', label: 'Aplicación / Equipo Acoplado', type: 'select', options: ['Camisa externa Viscosímetro Brookfield', 'Refrigeración de Reactor / Sonicador', 'Baño termostático directo (7 L)'], icon: 'fa-droplet' }
+            ],
+            'instron': [
+                { id: 'ensayo', label: 'Modo de Ensayo y Mordaza', type: 'select', options: ['Tracción (Mordaza Mecánica Cuña)', 'Tracción (Mordaza Neumática Films)', 'Flexión en 3 puntos', 'Compresión (Platos)', 'Cizalladura Interlaminar (ILSS)'], icon: 'fa-arrows-up-down' },
+                { id: 'celula', label: 'Célula de Carga (Instron 3365)', type: 'select', options: ['5 kN (Máxima capacidad)', '1 kN (Media capacidad)', '100 N (Alta sensibilidad / Films)'], icon: 'fa-weight-hanging' },
+                { id: 'velocidad', label: 'Velocidad de Cruceta (0.05 - 1000 mm/min)', type: 'text', placeholder: 'Ej. 2 mm/min (ISO 527)', icon: 'fa-gauge-high' }
+            ],
+            'celda_auto': [
+                { id: 'stimulus', label: 'Condiciones de Compresión y Temperatura', type: 'text', placeholder: 'Ej. 50 N compresión @ 150°C (Máx 250°C)', icon: 'fa-fire-flame-simple' },
+                { id: 'ciclos_auto', label: 'Tiempo de Reparación y Nº de Ciclo', type: 'text', placeholder: 'Ej. 2 horas - Ciclo 2 de 3', icon: 'fa-repeat' }
+            ],
+            'dens': [
+                { id: 'liquido', label: 'Líquido Auxiliar (Arquímedes)', type: 'select', options: ['Agua Destilada (ρ ≈ 0.997 g/cm³)', 'Etanol Absoluto', 'Medida en Seco'], icon: 'fa-droplet' },
+                { id: 'num_muestras', label: 'Nº de Especímenes a Medir', type: 'text', placeholder: 'Ej. 5 probetas para cálculo de porosidad Vv', icon: 'fa-hashtag' }
+            ],
+            'micro': [
+                { id: 'modo_opt', label: 'Modo de Iluminación Leica DMR', type: 'select', options: ['Luz Reflejada (Superficies opacas)', 'Luz Transmitida (Films transparentes)', 'Luz Polarizada Cruzada (Esferulitas)'], icon: 'fa-eye' },
+                { id: 'aumentos', label: 'Objetivos a utilizar', type: 'text', placeholder: 'Ej. 5x, 20x y 50x', icon: 'fa-magnifying-glass-plus' }
+            ],
+            'dea': [
+                { id: 'sensor', label: 'Configuración Sensor DEA 288 Ionic', type: 'select', options: ['Prensa de Horno (Hasta 400°C)', 'Sensor Desechable IDEX (Peine)', 'Sensor Reutilizable Coplanar'], icon: 'fa-microchip' },
+                { id: 'frecuencia', label: 'Barrido de Frecuencias (1 mHz - 1 MHz)', type: 'text', placeholder: 'Ej. 1 Hz a 100 kHz', icon: 'fa-bolt' },
+                { id: 'regimen', label: 'Programa Térmico de Curado', type: 'text', placeholder: 'Ej. Isotermo 140°C durante 2 h', icon: 'fa-clock' }
+            ],
+            'smu': [
+                { id: 'funcion', label: 'Modo Keithley 2450 SMU', type: 'select', options: ['Barrido I-V (Conductividad 2 / 4 hilos)', 'Piezoresistividad acoplada a Instron', 'Calentamiento por Efecto Joule', 'Resistencia Superficial / Volumétrica'], icon: 'fa-microchip' },
+                { id: 'limite', label: 'Rango V / I (Máx 200V / 1A / 20W)', type: 'text', placeholder: 'Ej. Sweep -10V a +10V, Compliance 100 mA', icon: 'fa-shield-halved' }
+            ],
+            'fuente_hv': [
+                { id: 'voltaje', label: 'Tensión de Salida Heinzinger (Máx 10 kV)', type: 'text', placeholder: 'Ej. 6.5 kV DC (Límite 5 mA)', icon: 'fa-bolt-lightning' },
+                { id: 'modo_hv', label: 'Aplicación de Alto Voltaje', type: 'select', options: ['Polarización Piezoeléctrica (Poling en baño)', 'Alineamiento de Nanocargas en campo E', 'Ensayo de Rigidez Dieléctrica'], icon: 'fa-sliders' }
+            ],
+            'medidor_d33': [
+                { id: 'frec_d33', label: 'Rango de Medida YE2730A (110 Hz, 0.25 N)', type: 'select', options: ['Rango Alta Sensibilidad: 0.1 a 200 pC/N (Res. 0.1 pC/N)', 'Rango Extendido: 1 a 2000 pC/N (Res. 1 pC/N)'], icon: 'fa-wave-square' },
+                { id: 'fuerza', label: 'Tipo de Muestra Piezoeléctrica', type: 'text', placeholder: 'Ej. Film PVDF / Compuesto BaTiO3 polarizado', icon: 'fa-hand-pointer' }
+            ],
+            'premex': [
+                { id: 'reaccion', label: 'Tipo de Síntesis / Polimerización', type: 'select', options: ['Policondensación de alta viscosidad', 'Síntesis de resina / prepolímero', 'Funcionalización bajo atmósfera inerte / vacío'], icon: 'fa-flask' },
+                { id: 'condiciones_premex', label: 'Temperatura (Máx 300°C) y Par (20-90 N·cm)', type: 'text', placeholder: 'Ej. 180°C bajo vacío en reactor NS 29/32', icon: 'fa-temperature-high' }
+            ],
+            'rotavapor1': [
+                { id: 'solvente1', label: 'Disolvente a Evaporar (P.E. Bajo/Medio)', type: 'text', placeholder: 'Ej. THF, Acetona, Diclorometano, Etanol', icon: 'fa-droplet' },
+                { id: 'param_rota1', label: 'Tª Baño (RT-99°C) y RPM (20-300 rpm)', type: 'text', placeholder: 'Ej. Baño 45°C, 120 rpm (Vacío hasta 2 mbar)', icon: 'fa-gauge' }
+            ],
+            'rotavapor2': [
+                { id: 'solvente2', label: 'Disolvente a Evaporar (P.E. Medio/Alto)', type: 'text', placeholder: 'Ej. DMF, Tolueno, Agua, Dioxano', icon: 'fa-droplet' },
+                { id: 'param_rota2', label: 'Presión VC 10 lite (mbar) y Tª Baño/Chiller', type: 'text', placeholder: 'Ej. 25 mbar, Baño 60°C, Chiller Glicol 5°C', icon: 'fa-sliders' }
+            ],
+            'uv_biolink': [
+                { id: 'modo_uv', label: 'Modo de Exposición UV (λ = 365 nm, 5x8W)', type: 'select', options: ['Por Dosis de Energía (Joules/cm²)', 'Por Tiempo Programado (Minutos/Segundos)'], icon: 'fa-sun' },
+                { id: 'dosis_uv', label: 'Valor de Dosis o Tiempo de Curado', type: 'text', placeholder: 'Ej. 2.5 J/cm² o 15 minutos', icon: 'fa-stopwatch' }
+            ],
+            'speed': [
+                { id: 'rpm', label: 'Velocidad (Máx 3500 RPM) y Tiempo', type: 'text', placeholder: 'Ej. 2500 RPM durante 3 min', icon: 'fa-rotate' },
+                { id: 'bote', label: 'Capacidad de Bote (Máx 150 g)', type: 'select', options: ['Bote pequeño (10 - 30 g)', 'Bote mediano (50 - 100 g)', 'Bote grande (100 - 150 g máx)'], icon: 'fa-jar' }
+            ],
+            'sonics_vcx750': [
+                { id: 'sonda', label: 'Configuración Sonda Titanio (20 kHz, 750W)', type: 'select', options: ['Sonda Estándar Ø 13 mm', 'Micro-tip (Volúmenes pequeños)'], icon: 'fa-wave-square' },
+                { id: 'amplitud', label: 'Amplitud (%) y Ciclo Pulser (ON / OFF)', type: 'text', placeholder: 'Ej. 40% Amplitud, Pulso 5s ON / 2s OFF', icon: 'fa-bolt' },
+                { id: 'tiempo', label: 'Tiempo Total y Baño Refrigerante', type: 'text', placeholder: 'Ej. 20 min en baño de agua-hielo', icon: 'fa-stopwatch' }
+            ],
+            'soni': [
+                { id: 'frec_elma', label: 'Frecuencia Elmasonic P y Modo', type: 'select', options: ['37 kHz - Modo Estándar / Pulse (Dispersión)', '80 kHz - Modo Suave', 'Modo Degas (Desgasificación de solvente)'], icon: 'fa-water' },
+                { id: 'temp_soni', label: 'Temperatura del Baño (RT a 80°C)', type: 'text', placeholder: 'Ej. Sin calefacción (RT) o 50°C', icon: 'fa-temperature-half' }
+            ],
+            'crio': [
+                { id: 'ciclos', label: 'Ciclos de Molienda y Frecuencia (5 - 30 Hz)', type: 'text', placeholder: 'Ej. 4 ciclos × 2 min @ 25 Hz (Precooling 5 min)', icon: 'fa-repeat' },
+                { id: 'n2', label: 'Consumo Estimado N2 Líquido (-196°C)', type: 'select', options: ['Bajo (< 2 Litros)', 'Medio (2 - 5 Litros)', 'Alto (> 5 Litros)'], icon: 'fa-snowflake' }
+            ],
+            'imp3d': [
+                { id: 'tecnologia', label: 'Filamento / Polímero a Imprimir', type: 'text', placeholder: 'Ej. PLA, ABS, TPU o Filamento dopado CNT', icon: 'fa-layer-group' },
+                { id: 'boquilla', label: 'Boquilla (Nozzle) y Temperaturas', type: 'text', placeholder: 'Ej. Nozzle 0.4 mm @ 215°C / Cama 60°C', icon: 'fa-cubes' }
+            ],
+            'troqueladora': [
+                { id: 'cuchilla', label: 'Cuchilla Normalizada CEAST', type: 'select', options: ['Hueso de perro (Dog-bone ISO 527 / ASTM D638)', 'Tira Rectangular', 'Troquel Circular'], icon: 'fa-scissors' },
+                { id: 'espesor', label: 'Material y Espesor de Lámina (mm)', type: 'text', placeholder: 'Ej. Film elastómero 1.5 mm (10 probetas)', icon: 'fa-ruler-horizontal' }
+            ],
+            'mufla': [
+                { id: 'temp_max', label: 'Temperatura Carbolite CWF 1200 (Máx 1200°C)', type: 'text', placeholder: 'Ej. 600°C (Calcinación fibra de vidrio)', icon: 'fa-fire' },
+                { id: 'tiempo', label: 'Rampa y Tiempo de Meseta', type: 'text', placeholder: 'Ej. 10°C/min hasta 600°C, mantener 2 h', icon: 'fa-hourglass-half' }
+            ],
+            'horno': [
+                { id: 'temp_max', label: 'Temperatura y Rampa del Tubo (°C)', type: 'text', placeholder: 'Ej. 850°C @ 5°C/min', icon: 'fa-fire-burner' },
+                { id: 'gas', label: 'Atmósfera Controlada del Tubo', type: 'select', options: ['Flujo de Nitrógeno (N2)', 'Flujo de Argón (Ar)', 'Vacío', 'Aire'], icon: 'fa-wind' }
+            ],
+            'est101': [
+                { id: 'temp', label: 'Temperatura de Trabajo (RT a 300°C)', type: 'text', placeholder: 'Ej. 120°C', icon: 'fa-temperature-arrow-up' },
+                { id: 'proceso', label: 'Proceso Térmico (Lab. 101)', type: 'select', options: ['Curado / Post-curado de resina', 'Secado de humedad en muestras', 'Precalentamiento de moldes', 'Acondicionamiento térmico'], icon: 'fa-sliders' }
+            ],
+            'est036': [
+                { id: 'temp', label: 'Temperatura de Trabajo (RT a 300°C)', type: 'text', placeholder: 'Ej. 150°C', icon: 'fa-temperature-arrow-up' },
+                { id: 'proceso', label: 'Proceso Térmico (Lab. 036)', type: 'select', options: ['Curado / Post-curado de resina', 'Secado de humedad en muestras', 'Envejecimiento térmico prolongado'], icon: 'fa-sliders' }
+            ],
+            'est027': [
+                { id: 'temp', label: 'Temperatura de Trabajo (RT a 300°C)', type: 'text', placeholder: 'Ej. 80°C', icon: 'fa-temperature-arrow-up' },
+                { id: 'proceso', label: 'Proceso Térmico (Lab. 027)', type: 'select', options: ['Curado / Post-curado de resina', 'Secado de vidrio / muestras', 'Precalentamiento de moldes'], icon: 'fa-sliders' }
+            ],
+            'camp027': [
+                { id: 'quimicos', label: 'Disolventes / Reactivos (Vitrina Lab. 027)', type: 'text', placeholder: 'Ej. Acetona, Resina Epoxi, Endurecedor amina', icon: 'fa-flask' },
+                { id: 'operacion', label: 'Operación bajo Extracción UNE-EN 14175', type: 'select', options: ['Síntesis / Mezcla química', 'Manipulación de nanopartículas en polvo', 'Ataque ácido / Digestión', 'Solvent Casting / Evaporación'], icon: 'fa-vial' }
+            ],
+            'camp101': [
+                { id: 'quimicos', label: 'Disolventes / Reactivos (Vitrina Lab. 101)', type: 'text', placeholder: 'Ej. THF, Cloroformo, PDMS, Nanotubos', icon: 'fa-flask' },
+                { id: 'operacion', label: 'Operación bajo Extracción UNE-EN 14175', type: 'select', options: ['Preparación de dispersiones / resinas', 'Vertido en molde / Colada', 'Limpieza con disolventes orgánicos', 'Solvent Casting / Evaporación'], icon: 'fa-vial' }
+            ],
+            'camp102': [
+                { id: 'quimicos', label: 'Disolventes / Reactivos (Vitrina Lab. 102)', type: 'text', placeholder: 'Ej. DMF, Tolueno, Silanos, Ácido nítrico', icon: 'fa-flask' },
+                { id: 'operacion', label: 'Operación bajo Extracción UNE-EN 14175', type: 'select', options: ['Síntesis orgánica / Polimerización', 'Funcionalización superficial (Silanización)', 'Filtración a vacío / Lavado', 'Evaporación de solventes'], icon: 'fa-vial' }
+            ],
+            'quesera': [
+                { id: 'ambiente', label: 'Modalidad de Uso', type: 'select', options: ['Vacío dinámico (Desgasificación de resina/silicona)', 'Vacío estático (Secado / Conservación)', 'Purga con gas inerte seco'], icon: 'fa-shield-virus' },
+                { id: 'operacion', label: 'Material a Desgasificar', type: 'text', placeholder: 'Ej. Moldes con PDMS o Resina Epoxi recién mezclada', icon: 'fa-hand-sparkles' }
+            ]
         };
 
         const app = {
             state: {
                 equipments: [
-                    { id: 'dsc', cat: 'Análisis Térmico', color: 'orange', name: 'DSC', desc: 'Análisis de transiciones térmicas, Tg y entalpías.', icon: 'fa-fire-flame-curved' },
-                    { id: 'rheo', cat: 'Análisis Térmico', color: 'orange', name: 'Reómetro', desc: 'Caracterización viscoelástica y módulos de almacenamiento.', icon: 'fa-droplet' },
-                    { id: 'dea', cat: 'Análisis Térmico', color: 'orange', name: 'Analizador DEA', desc: 'Monitorización del proceso de curado y cinética.', icon: 'fa-bolt' },
+                    // 1. Análisis Térmico y Reología (Naranja)
+                    { id: 'dsc', cat: '1. Análisis Térmico y Reología', color: 'orange', name: 'DSC (Calorimetría Diferencial)', desc: 'Flujo térmico diferencial: transición vítrea (Tg), fusión (Tm), cristalinidad (χc) y grado de curado (α).', icon: 'fa-fire-flame-curved' },
+                    { id: 'rheo', cat: '1. Análisis Térmico y Reología', color: 'orange', name: 'Reómetro Discovery HR-2', desc: 'TA Instruments (-160 a 600°C): módulos viscoelásticos (G\', G\'\'), punto de gel, cono-plato y torsión DMA.', icon: 'fa-droplet' },
+                    { id: 'visco', cat: '1. Análisis Térmico y Reología', color: 'orange', name: 'Viscosímetro Brookfield DV2T', desc: 'Viscosidad dinámica rotacional (1 a 6·10⁶ cP, 0.1-200 RPM), curvas de flujo y pot-life con sonda RTD.', icon: 'fa-arrows-spin' },
+                    { id: 'bano_refr', cat: '1. Análisis Térmico y Reología', color: 'orange', name: 'Baño Circulador PolyScience', desc: 'Termostato de recirculación AD07R-20 (-20 a 200°C, ±0.01°C, 7 L) para control isotermo externo.', icon: 'fa-temperature-low' },
                     
-                    { id: 'instron', cat: 'Ensayos Mecánicos', color: 'blue', name: 'Instron', desc: 'Propiedades mecánicas (tracción, compresión, flexión).', icon: 'fa-arrows-down-to-line' },
-                    { id: 'dens', cat: 'Ensayos Mecánicos', color: 'blue', name: 'Balanza de Densidades', desc: 'Determinación de densidad en sólidos y líquidos.', icon: 'fa-scale-balanced' },
+                    // 2. Caracterización Mecánica, Física y Morfológica (Azul)
+                    { id: 'instron', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', name: 'Instron 3365 (Ensayos Mecánicos)', desc: 'Tracción, compresión, flexión e ILSS (células 100 N, 1 kN y 5 kN; mordazas mecánicas y neumáticas).', icon: 'fa-arrows-down-to-line' },
+                    { id: 'celda_auto', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', name: 'Celda de Autorreparación', desc: 'Dispositivo termo-compresivo acoplado a Instron (hasta 250°C) para eficiencia de autorreparación (η_heal).', icon: 'fa-shield-heart' },
+                    { id: 'dens', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', name: 'Balanza Hidrostática Mettler Toledo', desc: 'Determinación de densidad por principio de Arquímedes (0.1 mg) y fracción volumétrica de poros (Vv).', icon: 'fa-scale-balanced' },
+                    { id: 'micro', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', name: 'Microscopio Óptico Leica DMR', desc: 'Inspección en luz reflejada, transmitida y polarizada: dispersión de cargas, esferulitas y cierre de grietas.', icon: 'fa-microscope' },
+
+                    // 3. Caracterización Eléctrica, Dieléctrica y Piezoeléctrica (Índigo)
+                    { id: 'dea', cat: '3. Caracterización Eléctrica, Dieléctrica y Piezoeléctrica', color: 'indigo', name: 'Analizador DEA 288 Ionic', desc: 'NETZSCH (1 mHz - 1 MHz, hasta 400°C): permitividad (ε\', ε\'\'), viscosidad iónica y curado in-situ.', icon: 'fa-bolt' },
+                    { id: 'smu', cat: '3. Caracterización Eléctrica, Dieléctrica y Piezoeléctrica', color: 'indigo', name: 'Unidad SMU Keithley 2450', desc: 'SourceMeter (200V, 1A, 20W): curvas I-V, conductividad a 2/4 hilos, percolación, efecto Joule y piezoresistividad.', icon: 'fa-microchip' },
+                    { id: 'fuente_hv', cat: '3. Caracterización Eléctrica, Dieléctrica y Piezoeléctrica', color: 'indigo', name: 'Fuente Alto Voltaje Heinzinger', desc: 'Generador DC LNC 10000-5pos (hasta 10 kV, 5 mA) para polarización piezoeléctrica (poling) y alineamiento.', icon: 'fa-plug-circle-bolt' },
+                    { id: 'medidor_d33', cat: '3. Caracterización Eléctrica, Dieléctrica y Piezoeléctrica', color: 'indigo', name: 'Medidor Piezoeléctrico d33 YE2730A', desc: 'Método Berlincourt (110 Hz, 0.25 N, res. 0.1 pC/N): medida directa del coeficiente piezoeléctrico d33.', icon: 'fa-wave-square' },
+
+                    // 4. Síntesis Química, Evaporación y Fotopolimerización (Esmeralda)
+                    { id: 'premex', cat: '4. Síntesis Química, Evaporación y Fotopolimerización', color: 'emerald', name: 'Reactor Síntesis Premex Redjaro (Lab. 102)', desc: 'Acoplamiento magnético estanco NS 29/32 (Torque 20-90 N·cm, máx. 300°C) para policondensación y resinas.', icon: 'fa-flask' },
+                    { id: 'rotavapor1', cat: '4. Síntesis Química, Evaporación y Fotopolimerización', color: 'emerald', name: 'Rotavapor 1 - IKA RV 3 V eco (Lab. 233)', desc: 'Evaporador rotatorio (20-300 rpm, baño 99°C) con bomba Vacuubrand MD 1 C (2 mbar) para solventes P.E. bajo/medio.', icon: 'fa-rotate' },
+                    { id: 'rotavapor2', cat: '4. Síntesis Química, Evaporación y Fotopolimerización', color: 'emerald', name: 'Rotavapor 2 - IKA RV 3 V eco + Chiller (Lab. 102)', desc: 'Con bomba VACSTAR (9 mbar), controlador VC 10 lite y Chiller RC 2 lite (agua:glicol) para solventes P.E. medio/alto.', icon: 'fa-arrows-rotate' },
+                    { id: 'uv_biolink', cat: '4. Síntesis Química, Evaporación y Fotopolimerización', color: 'emerald', name: 'Cámara Reticulación UV Bio-Link BLX-365', desc: 'Vilber Lourmat (5 × 8W, λ = 365 nm): irradiación UV controlada en J/cm² para fotocurado de resinas y membranas.', icon: 'fa-sun' },
+
+                    // 5. Procesamiento, Dispersión y Preparación de Muestras (Morado)
+                    { id: 'speed', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'SpeedMixer DAC 150.1 FVZ-K', desc: 'Mezcladora centrífuga planetaria sin aspas (hasta 3500 RPM, máx. 150 g) para dispersión y desgasificación.', icon: 'fa-blender' },
+                    { id: 'sonics_vcx750', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'Sonicador de Sonda Sonics VCX-750', desc: 'Procesador ultrasónico Vibr-Cell (750 W, 20 kHz, sonda Ti) para exfoliación de nanopartículas por cavitación.', icon: 'fa-bolt-lightning' },
+                    { id: 'soni', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'Baño Ultrasonidos Elmasonic P', desc: 'Cuba ultrasónica de doble frecuencia (37 / 80 kHz, hasta 80°C) con modos Pulse, Sweep y Degas.', icon: 'fa-water' },
+                    { id: 'crio', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'Molino Criogénico Retsch CryoMill', desc: 'Pulverización criogénica a -196°C con autofllenado de N2 líquido (5-30 Hz) para polímeros bajo su Tg.', icon: 'fa-snowflake' },
+                    { id: 'troqueladora', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'Troqueladora Manual CEAST', desc: 'Corte normalizado de probetas tipo hueso de perro (ISO 527 / ASTM D638) y películas poliméricas.', icon: 'fa-scissors' },
+                    { id: 'imp3d', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', name: 'Impresora 3D FFF / FDM', desc: 'Fabricación aditiva de probetas funcionales, estructuras celulares, prototipos CAD y moldes.', icon: 'fa-cubes' },
+
+                    // 6. Tratamiento Térmico, Curado y Hornos (Rojo)
+                    { id: 'mufla', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', name: 'Horno Mufla Carbolite CWF 1200', desc: 'Cámara de alta temperatura (hasta 1200°C) para calcinación (burn-off), contenido en fibra (Wf) y sinterizado.', icon: 'fa-fire' },
+                    { id: 'horno', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', name: 'Horno Tubular Carbolite Gero', desc: 'Tratamientos térmicos de alta temperatura, pirólisis y reducción de rGO bajo atmósfera inerte (N2, Ar) o vacío.', icon: 'fa-fire-burner' },
+                    { id: 'est101', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', name: 'Estufa 101 (Convección Memmert/Binder)', desc: 'Estufa de convección forzada (hasta 300°C) para ciclos de curado, post-curado y secado en Lab. 101.', icon: 'fa-temperature-arrow-up' },
+                    { id: 'est036', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', name: 'Estufa 036 (Convección Memmert/Binder)', desc: 'Estufa de convección forzada (hasta 300°C) para tratamientos isotermos y envejecimiento en Lab. 036.', icon: 'fa-temperature-arrow-up' },
+                    { id: 'est027', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', name: 'Estufa 027 (Convección Memmert/Binder)', desc: 'Estufa de convección forzada (hasta 300°C) para acondicionamiento térmico y moldes en Lab. 027.', icon: 'fa-temperature-arrow-up' },
                     
-                    { id: 'mufla', cat: 'Hornos y Estufas', color: 'red', name: 'Mufla', desc: 'Calcinación de muestras y tratamientos extremos.', icon: 'fa-fire' },
-                    { id: 'horno', cat: 'Hornos y Estufas', color: 'red', name: 'Horno Tubular', desc: 'Tratamientos térmicos bajo atmósfera inerte.', icon: 'fa-fire-burner' },
-                    { id: 'est1', cat: 'Hornos y Estufas', color: 'red', name: 'Estufa 1', desc: 'Secado de muestras y curado de resinas.', icon: 'fa-temperature-arrow-up' },
-                    { id: 'est2', cat: 'Hornos y Estufas', color: 'red', name: 'Estufa 2', desc: 'Tratamientos térmicos prolongados.', icon: 'fa-temperature-arrow-up' },
-                    
-                    { id: 'camp027', cat: 'Extracción', color: 'teal', name: 'Campana del 027', desc: 'Extracción de gases en laboratorio 027.', icon: 'fa-wind' },
-                    { id: 'camp101', cat: 'Extracción', color: 'teal', name: 'Campana del 101', desc: 'Extracción de gases en laboratorio 101.', icon: 'fa-wind' },
-                    { id: 'camp102', cat: 'Extracción', color: 'teal', name: 'Campana del 102', desc: 'Extracción de gases en laboratorio 102.', icon: 'fa-wind' },
-                    { id: 'quesera', cat: 'Extracción', color: 'teal', name: 'Quesera', desc: 'Quesera para manipulación en ambiente controlado.', icon: 'fa-flask-vial' },
-                    
-                    { id: 'speed', cat: 'Procesamiento', color: 'purple', name: 'Speed Mixer', desc: 'Homogeneización rápida y desgasificación.', icon: 'fa-blender' },
-                    { id: 'soni', cat: 'Procesamiento', color: 'purple', name: 'Ultrasonidos', desc: 'Baño de ultrasonidos para dispersión de nanopartículas.', icon: 'fa-water' },
-                    { id: 'crio', cat: 'Procesamiento', color: 'purple', name: 'Criomolienda', desc: 'Molienda a bajas temperaturas con nitrógeno líquido.', icon: 'fa-snowflake' },
-                    { id: 'imp3d', cat: 'Procesamiento', color: 'purple', name: 'Impresora 3D', desc: 'Fabricación aditiva de probetas y prototipos.', icon: 'fa-cubes' },
-                    
-                    { id: 'micro', cat: 'Caracterización', color: 'orange', name: 'Microscopio', desc: 'Inspección óptica de morfología y dispersión.', icon: 'fa-microscope' }
+                    // 7. Vitrinas de Extracción de Gases y Cámaras de Vacío (Verde Azulado)
+                    { id: 'camp027', cat: '7. Vitrinas de Extracción de Gases y Cámaras de Vacío', color: 'teal', name: 'Vitrina de Extracción de Gases (Lab. 027)', desc: 'Cabina química certificada UNE-EN 14175 para manipulación de disolventes COV, resinas y nanopartículas.', icon: 'fa-wind' },
+                    { id: 'camp101', cat: '7. Vitrinas de Extracción de Gases y Cámaras de Vacío', color: 'teal', name: 'Vitrina de Extracción de Gases (Lab. 101)', desc: 'Cabina química certificada UNE-EN 14175 para preparación de disoluciones, colada y extracción en Lab. 101.', icon: 'fa-wind' },
+                    { id: 'camp102', cat: '7. Vitrinas de Extracción de Gases y Cámaras de Vacío', color: 'teal', name: 'Vitrina de Extracción de Gases (Lab. 102)', desc: 'Cabina química certificada UNE-EN 14175 para síntesis orgánica, silanización y ataques ácidos en Lab. 102.', icon: 'fa-wind' },
+                    { id: 'quesera', cat: '7. Vitrinas de Extracción de Gases y Cámaras de Vacío', color: 'teal', name: 'Cámara de Desgasificación a Vacío (Quesera)', desc: 'Campana hermética conectada a bomba de vacío para eliminación de microburbujas en resinas y siliconas.', icon: 'fa-flask-vial' }
                 ],
                 reservations: [],
                 currentUser: '',
@@ -462,6 +1787,22 @@
                 localStorage.removeItem('pcg_user_cloud_v1');
                 document.getElementById('headerUserName').innerText = 'Identificarse';
                 this.closeUserModal();
+            },
+
+            openTecnicas() {
+                document.getElementById('tecnicasModal').classList.remove('hidden');
+                const content = document.getElementById('tecnicasContent');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            closeTecnicas() {
+                const content = document.getElementById('tecnicasContent');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => document.getElementById('tecnicasModal').classList.add('hidden'), 300);
             },
 
             openNormativa() {
@@ -675,7 +2016,7 @@
 
                 const eq = this.state.equipments.find(e => e.id === this.state.selectedEqId);
                 const eqNameEl = document.getElementById('formEqName');
-                if(eqNameEl && eq) eqNameEl.innerText = eq.name;
+                if(eqNameEl && eq) eqNameEl.innerText = `${eq.name} (${eq.cat})`;
 
                 this.updateEndHours();
                 this.renderDynamicFields();
@@ -708,46 +2049,37 @@
                 const eq = this.state.equipments.find(e => e.id === this.state.selectedEqId);
                 if (!eq) return;
 
+                const fields = eqFieldsConfig[eq.id] || [];
+
                 let html = `
-                    <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100 shadow-sm mb-3">
-                        <label class="block text-[13px] font-black text-slate-800 mb-2"><i class="fa-solid fa-flask mr-1 text-blue-600"></i> Nombre de la Muestra o Proyecto <span class="text-red-500">*</span></label>
-                        <input type="text" id="formSample" required class="w-full bg-white border-2 border-slate-300 rounded-xl px-4 py-3.5 text-base font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100 smooth-transition shadow-inner" placeholder="Ej. Epoxi-Nanosilica 2% wt">
+                    <div class="bg-blue-50/80 p-4 rounded-xl border border-blue-200 shadow-sm mb-4">
+                        <label class="block text-[13px] font-black text-slate-900 mb-2"><i class="fa-solid fa-flask mr-1.5 text-blue-600"></i> Nombre de la Muestra o Proyecto <span class="text-red-500">*</span></label>
+                        <input type="text" id="formSample" required class="w-full bg-white border-2 border-blue-300 rounded-xl px-4 py-3 text-base font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100 smooth-transition shadow-inner" placeholder="Ej. Epoxi-Nanosilica 2% wt">
                     </div>
+                    <div class="grid grid-cols-1 gap-4">
                 `;
 
-                if (eq.cat === 'Análisis Térmico') {
-                    html += `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                                <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-chart-line mr-1 text-slate-500"></i> Método / Rampa</label>
-                                <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. 25 a 300°C @ 10K/min">
-                            </div>
-                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                                <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-wind mr-1 text-slate-500"></i> Atmósfera / Purga</label>
-                                <select id="formAtm" class="w-full bg-white border-2 border-slate-300 rounded-lg px-3 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition">
-                                    <option value="Nitrógeno (N2)">Nitrógeno (N2)</option>
-                                    <option value="Aire Sintético">Aire Sintético</option>
-                                    <option value="Oxígeno (O2)">Oxígeno (O2)</option>
-                                    <option value="Argón (Ar)">Argón (Ar)</option>
+                fields.forEach(f => {
+                    if (f.type === 'select') {
+                        html += `
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <label class="block text-xs font-black text-slate-900 mb-2"><i class="fa-solid ${f.icon} mr-1.5 text-blue-600"></i> ${f.label}</label>
+                                <select id="custom_${f.id}" class="w-full bg-white border-2 border-slate-300 rounded-lg px-3.5 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition cursor-pointer shadow-sm">
+                                    ${f.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
                                 </select>
                             </div>
-                        </div>
-                    `;
-                } else if (eq.cat === 'Ensayos Mecánicos') {
-                    html += `
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                            <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-sliders mr-1 text-slate-500"></i> Célula de Carga / Mordazas</label>
-                            <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. Célula 10kN, mordazas de cuña">
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                            <label class="block text-xs font-black text-slate-800 mb-2"><i class="fa-solid fa-sliders mr-1 text-slate-500"></i> Parámetros del Ensayo / Condiciones</label>
-                            <input type="text" id="formMethod" class="w-full bg-white border-2 border-slate-300 rounded-lg px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition" placeholder="Ej. Ciclo estándar 15 min / 120ºC">
-                        </div>
-                    `;
-                }
+                        `;
+                    } else {
+                        html += `
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <label class="block text-xs font-black text-slate-900 mb-2"><i class="fa-solid ${f.icon} mr-1.5 text-blue-600"></i> ${f.label}</label>
+                                <input type="text" id="custom_${f.id}" required class="w-full bg-white border-2 border-slate-300 rounded-lg px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 smooth-transition shadow-sm" placeholder="${f.placeholder || ''}">
+                            </div>
+                        `;
+                    }
+                });
+
+                html += `</div>`;
                 container.innerHTML = html;
             },
 
@@ -766,11 +2098,21 @@
                 const endHour = document.getElementById('summaryHourEnd').value;
 
                 const sample = document.getElementById('formSample').value.trim();
-                const methodInput = document.getElementById('formMethod');
-                const method = methodInput ? methodInput.value.trim() : 'Estándar';
-                const atmSelect = document.getElementById('formAtm');
-                const atm = atmSelect ? atmSelect.value : '';
                 const notes = document.getElementById('formNotes').value.trim();
+
+                const fields = eqFieldsConfig[this.state.selectedEqId] || [];
+                let customParams = {};
+                let summaryParts = [];
+
+                fields.forEach(f => {
+                    const el = document.getElementById(`custom_${f.id}`);
+                    if (el && el.value.trim() !== '') {
+                        customParams[f.label] = el.value.trim();
+                        summaryParts.push(el.value.trim());
+                    }
+                });
+
+                const methodSummary = summaryParts.length > 0 ? summaryParts.join(' · ') : 'Estándar';
 
                 const seriesId = 'SERIES_' + Date.now();
                 const slots = this.generateTimeSlots(startDateStr, startHour, endDateStr, endHour);
@@ -795,8 +2137,8 @@
                         hour: s.hour,
                         user: this.state.currentUser,
                         sample: sample,
-                        method: method,
-                        atm: atm,
+                        method: methodSummary,
+                        customParams: customParams,
                         notes: notes
                     };
                     window.dbSet(window.dbRef(window.db, 'reservations/' + resId), newRes);
@@ -833,14 +2175,19 @@
                 document.getElementById('viewDate').innerText = `${res.date} a las ${res.hour}`;
 
                 let detailsHtml = `
-                    <div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Muestra:</span><span class="text-xs font-bold text-slate-800">${res.sample || 'N/A'}</span></div>
-                    <div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Método / Rampa:</span><span class="text-xs font-bold text-slate-800">${res.method || 'N/A'}</span></div>
+                    <div class="py-2 border-b border-slate-100 flex justify-between gap-4"><span class="text-xs font-bold text-slate-400">Muestra / Proyecto:</span><span class="text-xs font-black text-slate-900 text-right">${res.sample || 'N/A'}</span></div>
                 `;
-                if (res.atm) {
-                    detailsHtml += `<div class="py-1.5 border-b border-slate-100 flex justify-between"><span class="text-xs font-bold text-slate-400">Atmósfera:</span><span class="text-xs font-bold text-slate-800">${res.atm}</span></div>`;
+
+                if (res.customParams && Object.keys(res.customParams).length > 0) {
+                    for (const [label, val] of Object.entries(res.customParams)) {
+                        detailsHtml += `<div class="py-2 border-b border-slate-100 flex justify-between gap-4"><span class="text-xs font-bold text-slate-400">${label}:</span><span class="text-xs font-bold text-slate-800 text-right">${val}</span></div>`;
+                    }
+                } else {
+                    detailsHtml += `<div class="py-2 border-b border-slate-100 flex justify-between gap-4"><span class="text-xs font-bold text-slate-400">Parámetros:</span><span class="text-xs font-bold text-slate-800 text-right">${res.method || 'N/A'}</span></div>`;
                 }
+
                 if (res.notes) {
-                    detailsHtml += `<div class="py-1.5 pt-2"><span class="text-xs font-bold text-slate-400 block mb-1">Observaciones:</span><p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">${res.notes}</p></div>`;
+                    detailsHtml += `<div class="py-2 pt-3"><span class="text-xs font-bold text-slate-400 block mb-1">Observaciones:</span><p class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200">${res.notes}</p></div>`;
                 }
                 document.getElementById('viewDetails').innerHTML = detailsHtml;
 
