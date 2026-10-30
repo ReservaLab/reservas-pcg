@@ -351,6 +351,13 @@
                     </h4>
                     <div id="dynamicFormFields" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
                 </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <label class="block text-sm font-extrabold text-slate-800 uppercase mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-vials text-purple-600"></i> Desglose de Muestras y Ensayos
+                    </label>
+                    <textarea id="bookSamples" rows="2" placeholder="Ej. 3 probetas de PLA (Tracción a 1mm/min) y 2 de ABS (Flexión)" class="w-full p-4 border border-slate-300 rounded-xl outline-none text-base font-medium resize-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"></textarea>
+                </div>
                 
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <label class="block text-sm font-extrabold text-slate-800 uppercase mb-3 flex items-center gap-2" id="labelNotes">
@@ -395,7 +402,12 @@
                     <div id="viewParams" class="bg-white border border-slate-200 rounded-2xl p-5 text-base font-medium text-slate-700 space-y-3 shadow-sm"></div>
                 </div>
                 
-                <div id="viewNotesContainer">
+                <div id="viewSamplesContainer">
+                    <h4 class="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fa-solid fa-vials text-purple-600"></i> Muestras y Ensayos</h4>
+                    <div class="bg-purple-50 border border-purple-200 p-5 rounded-2xl text-base font-medium text-purple-900 shadow-sm" id="viewSamples">--</div>
+                </div>
+
+                <div id="viewNotesContainer" class="mt-6">
                     <h4 class="text-sm font-extrabold text-slate-800 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fa-solid fa-comment-dots text-slate-400"></i> Observaciones</h4>
                     <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl text-base font-medium text-amber-900 shadow-sm" id="viewNotes">--</div>
                 </div>
@@ -493,10 +505,10 @@
             },
             {
                 id: 'celda_rep', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', icon: ICONS.box,
-                name: 'Celda de Autorreparación — Lab. 036', brand: 'PCG LAB',
-                desc: 'Dispositivo termo-compresivo acoplado a Instron (hasta 250°C) para eficiencia de autorreparación (η_heal).',
-                principle: 'Aplicación simultánea de presión de contacto controlada y ciclo térmico isotermo en la máquina Instron para activar mecanismos dinámicos de autorreparación.',
-                specs: 'Ubicación: Laboratorio 036. Temperatura operativa hasta 250 °C | Control de fuerza normal vía célula Instron | Platos calefactados.',
+                name: 'Celda de Autorreparación — Lab. 120', brand: 'PCG LAB',
+                desc: 'Dispositivo termo-compresivo acoplado al Microscopio Óptico (hasta 250°C) para eficiencia de autorreparación (η_heal).',
+                principle: 'Aplicación simultánea de presión de contacto controlada y ciclo térmico isotermo bajo observación óptica para activar mecanismos dinámicos de autorreparación.',
+                specs: 'Ubicación: Laboratorio 120. Temperatura operativa hasta 250 °C | Acoplado a microscopio óptico | Platos calefactados.',
                 apps: 'Evaluación cuantitativa de la eficiencia de autorreparación (η_heal) en redes covalentes adaptables (vitrimeros) y elastómeros.',
                 standards: 'Protocolo PCG Self-Healing',
                 equation: 'η_heal (%) = ( P_reparado / P_virgen ) · 100',
@@ -515,10 +527,10 @@
             },
             {
                 id: 'micro_leica', cat: '2. Caracterización Mecánica, Física y Morfológica', color: 'blue', icon: ICONS.microscope,
-                name: 'Microscopio Óptico Leica DMR — Lab. 036', brand: 'LEICA',
+                name: 'Microscopio Óptico Leica DMR — Lab. 120', brand: 'LEICA',
                 desc: 'Inspección en luz reflejada, transmitida y polarizada: dispersión de cargas y esferulitas.',
                 principle: 'Formación de imagen ampliada mediante iluminación en campo claro, campo oscuro y luz polarizada (birrefringencia) con adquisición digital calibrada.',
-                specs: 'Ubicación: Laboratorio 036. Modelo: Leica DMR | Modos: reflejada, transmitida y polarizadores cruzados | Objetivos de 5x a 100x con cámara digital.',
+                specs: 'Ubicación: Laboratorio 120. Modelo: Leica DMR | Modos: reflejada, transmitida y polarizadores cruzados | Objetivos de 5x a 100x con cámara digital.',
                 apps: 'Evaluación de macro-dispersión de nanocargas, crecimiento esferulítico, espesor de recubrimientos y cierre de grietas.',
                 standards: 'ISO 9276 / ASTM E2015',
                 equation: 'R = 0.61 · λ / NA   |   M_total = M_obj · M_oc',
@@ -631,10 +643,10 @@
             },
             {
                 id: 'sonics_750', cat: '5. Procesamiento, Dispersión y Preparación de Muestras', color: 'purple', icon: ICONS.zap,
-                name: 'Sonicador de Sonda Sonics VCX-750 — Lab. 036', brand: 'SONICS',
+                name: 'Sonicador de Sonda Sonics VCX-750 — Lab. 027', brand: 'SONICS',
                 desc: 'Procesador ultrasónico Vibr-Cell (750 W, 20 kHz, sonda Ti) para exfoliación por cavitación.',
                 principle: 'Transducción piezoeléctrica a 20 kHz transmitida mediante sonda de titanio que induce cavitación acústica e implosión de microburbujas.',
-                specs: 'Ubicación: Laboratorio 036. Modelo: Sonics VCX-750 | Potencia: 750 W | Frecuencia: 20 kHz | Sonda de aleación Ti-6Al-4V con modo pulsado.',
+                specs: 'Ubicación: Laboratorio 027. Modelo: Sonics VCX-750 | Potencia: 750 W | Frecuencia: 20 kHz | Sonda de aleación Ti-6Al-4V con modo pulsado.',
                 apps: 'Desaglomeración de nanotubos de carbono (MWCNT), exfoliación de grafeno y dispersión de nanoarcillas.',
                 standards: 'ISO/TS 21357 / SOP Sonicación',
                 equation: 'E_específica = (P_media · t_efectivo) / V_muestra   (en J/mL)',
@@ -729,17 +741,6 @@
                 standards: 'DIN 12880 / ISO 188',
                 equation: 'q_conv = h · A · (T_aire - T_muestra)',
                 vars: 'h: Coeficiente convectivo (W/m²·K) | T_aire: Consigna isotérmica (°C)'
-            },
-            {
-                id: 'estufa_027_mb', cat: '6. Tratamiento Térmico, Curado y Hornos', color: 'red', icon: ICONS.thermo,
-                name: 'Estufa 027 (Convección Memmert/Binder) — Lab. 027', brand: 'MEMMERT / BINDER',
-                desc: 'Estufa de convección forzada (hasta 300°C) para acondicionamiento térmico y moldes en Lab. 027.',
-                principle: 'Calentamiento convectivo homogéneo para atemperado de utillaje metálico, evaporación suave de humedad y ciclos térmicos.',
-                specs: 'Ubicación: Laboratorio 027. Rango térmico hasta 300 °C | Convección forzada | Protección contra sobretemperatura.',
-                apps: 'Precalentamiento de moldes de colada, acondicionamiento de probetas y curado térmico en Lab. 027.',
-                standards: 'DIN 12880 / ASTM D618',
-                equation: 'M (%) = [ (m_húmeda - m_seca) / m_seca ] · 100',
-                vars: 'M: Humedad eliminada (%) | m_húmeda: Masa inicial (g) | m_seca: Masa seca (g)'
             },
 
             // 7. VITRINAS DE EXTRACCIÓN DE GASES Y CÁMARAS DE VACÍO
@@ -845,9 +846,10 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Crisol / Cápsula</label>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Cápsula</label>
                     <select id="param_crisol" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
-                        <option value="Aluminio (Estándar con tapa perforada / sellada)">Aluminio (Estándar con tapa perforada / sellada)</option>
+                        <option value="Aluminio (Tapa perforada)">Aluminio (Tapa perforada)</option>
+                        <option value="Aluminio (Tapa sellada)">Aluminio (Tapa sellada)</option>
                     </select>
                 </div>
                 <div>
@@ -879,8 +881,9 @@
                     <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Célula de Carga y Útil</label>
                     <select id="param_celula" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
                         <option value="500 N HBM S9M + Mordazas Neumáticas">500 N HBM S9M + Mordazas Neumáticas (Películas / Fibras)</option>
-                        <option value="1 kN / 5 kN + Mordazas Mecánicas">1 kN / 5 kN + Mordazas Mecánicas (Tracción Estándar)</option>
-                        <option value="Puente Gris Flexión 3 Puntos">Puente Gris Flexión 3 Puntos (Laminados / Barras)</option>
+                        <option value="1 kN + Mordazas Mecánicas">1 kN + Mordazas Mecánicas (Tracción General)</option>
+                        <option value="5 kN + Mordazas Mecánicas">5 kN + Mordazas Mecánicas (Tracción Alta Carga)</option>
+                        <option value="Montaje para ensayos de flexión de 3 puntos e ILSS">Montaje para ensayos de flexión de 3 puntos e ILSS</option>
                     </select>
                 </div>
                 <div>
@@ -944,11 +947,11 @@
             `,
             'elma_p': `
                 <div>
-                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Modo de Ultrasonidos (Elmasonic P)</label>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Modo de Ultrasonidos (Elmasonic S)</label>
                     <select id="param_modo" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
-                        <option value="Modo Sweep (Distribución homogénea 37/80 kHz)">Modo Sweep (Distribución homogénea 37/80 kHz)</option>
+                        <option value="Modo Sweep (Distribución homogénea 37 kHz)">Modo Sweep (Distribución homogénea 37 kHz)</option>
                         <option value="Modo Degas (Desgasificación rápida de disoluciones)">Modo Degas (Desgasificación rápida de disoluciones)</option>
-                        <option value="Modo Pulse (120% potencia para dispersión de nanotubos)">Modo Pulse (120% potencia para dispersión de nanotubos)</option>
+                        <option value="Modo Normal">Modo Normal</option>
                     </select>
                 </div>
                 <div>
@@ -960,9 +963,7 @@
                 <div>
                     <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Husillo / Adaptador Brookfield</label>
                     <select id="param_husillo" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
-                        <option value="Small Sample Adapter (Spindle 21 / 27 / 28)">Small Sample Adapter (Spindle 21 / 27 / 28)</option>
-                        <option value="Spindle LV / RV estándar (H02 a H07)">Spindle LV / RV estándar (H02 a H07)</option>
-                        <option value="Helipath Stand (Geles y Pastas Viscosas)">Helipath Stand (Geles y Pastas Viscosas)</option>
+                        <option value="Small Sample Adapter (Spindle 21)">Small Sample Adapter (Spindle 21)</option>
                     </select>
                 </div>
                 <div>
@@ -1028,17 +1029,213 @@
                     </select>
                 </div>
             `,
-            'estufa_027_mb': `
+            'balanza_met': `
                 <div>
-                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Consigna de Temperatura (°C - Máx 300°C)</label>
-                    <input type="number" max="300" id="param_temp" placeholder="Ej. 80" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
-                </div>
-                <div class="col-span-1 md:col-span-2">
-                    <label class="block text-xs font-extrabold text-red-700 uppercase mb-2">¿Contiene disolventes volátiles o inflamables?</label>
-                    <select id="param_vapores" class="w-full p-3 border border-red-300 rounded-xl text-sm outline-none bg-red-50 font-bold" onchange="checkVapors(this)">
-                        <option value="NO">NO (Muestra segura)</option>
-                        <option value="SÍ">SÍ (Prohibido)</option>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Líquido de Inmersión Auxiliar</label>
+                    <select id="param_liq" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Agua Destilada">Agua Destilada</option>
+                        <option value="Etanol">Etanol</option>
+                        <option value="Isooctano">Isooctano</option>
+                        <option value="Otro (Especificar en notas)">Otro (Especificar en notas)</option>
                     </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Rejilla (Kit Arquímedes)</label>
+                    <select id="param_rejilla" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Rejilla Cóncava (Muestras flotantes)">Rejilla Cóncava (Muestras flotantes)</option>
+                        <option value="Rejilla Convexa (Muestras pesadas)">Rejilla Convexa (Muestras pesadas)</option>
+                    </select>
+                </div>
+                <div class="col-span-1 md:col-span-2 flex items-start gap-3 mt-1 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                    <input type="checkbox" id="param_limpieza_dens" class="w-5 h-5 accent-emerald-600 mt-0.5 rounded border-slate-300" checked>
+                    <label for="param_limpieza_dens" class="text-xs sm:text-sm font-bold text-emerald-900 leading-tight">Certifico que he comprobado que la balanza está impoluta, y me comprometo a limpiar cualquier resto en el platillo con pincel (nunca soplando) al finalizar mi uso.</label>
+                </div>
+            `,
+            'balanza_quintix_101': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Modo de Pesaje</label>
+                    <select id="param_modo_quintix" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Pesaje Estándar Analítico (mg/µg)">Pesaje Estándar Analítico (mg/µg)</option>
+                        <option value="Pesaje Estequiométrico / Formulación">Pesaje Estequiométrico / Formulación</option>
+                    </select>
+                </div>
+                <div class="col-span-1 md:col-span-2 flex items-start gap-3 mt-1 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                    <input type="checkbox" id="param_limpieza_ana" class="w-5 h-5 accent-emerald-600 mt-0.5 rounded border-slate-300" checked>
+                    <label for="param_limpieza_ana" class="text-xs sm:text-sm font-bold text-emerald-900 leading-tight">Certifico que he comprobado que la balanza está impoluta, y me comprometo a limpiar cualquier resto en el platillo con pincel (nunca soplando) al finalizar mi uso.</label>
+                </div>
+            `,
+            'micro_leica': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Aumentos / Objetivos a utilizar</label>
+                    <select id="param_aumentos" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Bajos Aumentos (5x, 10x, 20x)">Bajos Aumentos (5x, 10x, 20x)</option>
+                        <option value="Altos Aumentos (50x, 100x con aceite)">Altos Aumentos (50x, 100x con aceite de inmersión)</option>
+                        <option value="Todos los aumentos">Todos los aumentos</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Modo de Iluminación</label>
+                    <select id="param_ilum" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Luz Transmitida (Transparencia)">Luz Transmitida (Transparencia)</option>
+                        <option value="Luz Reflejada (Opacos / Superficies)">Luz Reflejada (Opacos / Superficies)</option>
+                        <option value="Luz Polarizada (Birrefringencia)">Luz Polarizada (Birrefringencia)</option>
+                    </select>
+                </div>
+            `,
+            'dea_288': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Sensores Dieléctricos o Acople</label>
+                    <select id="param_sensores_dea" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="Sensores Dieléctricos Desechables (IDEX)">Sensores Dieléctricos Desechables (IDEX / Comb)</option>
+                        <option value="Acople Metálico con Teflón (Muestras sólidas)">Acople Metálico con Teflón (Muestras sólidas)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Rango de Frecuencias</label>
+                    <input type="text" id="param_freq_dea" placeholder="Ej. 1 Hz - 100 kHz" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'celda_rep': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Fuerza de Contacto (Célula)</label>
+                    <input type="text" id="param_fuerza_celda" placeholder="Ej. 5 N (Presión constante)" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Ciclo Térmico Programado (°C)</label>
+                    <input type="text" id="param_temp_celda" placeholder="Ej. Rampa a 120°C y mantener 1 hora" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'microondas_101': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Potencia (W) y Tiempo</label>
+                    <input type="text" id="param_pwr_mw" placeholder="Ej. 800W durante 2 minutos" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Muestra</label>
+                    <input type="text" id="param_muestra_mw" placeholder="Ej. Resina sin curar en vaso precipitado abierto" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'spellman_sl600': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Voltaje Máximo a Aplicar (kV)</label>
+                    <input type="text" id="param_kv" placeholder="Ej. 5 kV DC" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tiempo de Polarización / Ensayo</label>
+                    <input type="text" id="param_t_kv" placeholder="Ej. 30 minutos" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'vitrina_102': `
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Reactivos o Ácidos a Manipular</label>
+                    <input type="text" id="param_quim_102" placeholder="Ej. Ácido Nítrico / APTES (Silanización)" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                </div>
+            `,
+            'vitrina_101': `
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Reactivos a Manipular</label>
+                    <input type="text" id="param_quim_101" placeholder="Ej. Disolventes orgánicos generales" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                </div>
+            `,
+            'estufa_vac_101': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Nivel de Vacío (mbar)</label>
+                    <input type="text" id="param_vac_101" placeholder="Ej. 10 mbar" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Consigna de Temperatura (°C)</label>
+                    <input type="text" id="param_t_vac" placeholder="Ej. 80 °C" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'cryomill': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Frecuencia Vibratoria (Hz)</label>
+                    <input type="text" id="param_hz_cryo" placeholder="Ej. 25 Hz" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Ciclos de Enfriamiento y Molienda</label>
+                    <input type="text" id="param_cy_cryo" placeholder="Ej. 2 ciclos de pre-cooling, 3 min molienda" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'ceast_cut': `
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Cuchilla (Norma)</label>
+                    <select id="param_cuchilla" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none bg-white font-medium">
+                        <option value="ISO 527-2 (Probetas 1BA o Tipo 5A)">ISO 527-2 (Probetas 1BA o Tipo 5A)</option>
+                        <option value="ASTM D638 (Probetas Tipo IV o V)">ASTM D638 (Probetas Tipo IV o V)</option>
+                    </select>
+                </div>
+            `,
+            'sonics_750': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Amplitud de Sonda (%)</label>
+                    <input type="text" id="param_amp_sonic" placeholder="Ej. 40% Amplitud" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Ciclo de Pulsos (ON/OFF) y Tiempo Total</label>
+                    <input type="text" id="param_ciclo_sonic" placeholder="Ej. 5s ON / 5s OFF, total 10 min" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'uv_curing': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Dosis Programada (J/cm²) o Tiempo</label>
+                    <input type="text" id="param_uv_dose" placeholder="Ej. 5 J/cm²" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Tipo de Resina Fotocurable</label>
+                    <input type="text" id="param_uv_resina" placeholder="Ej. Acrílica pura" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'rota_1': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Solvente Principal a Evaporar</label>
+                    <input type="text" id="param_solv_rota1" placeholder="Ej. Acetona / THF" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Temperatura del Baño (°C)</label>
+                    <input type="text" id="param_t_rota1" placeholder="Ej. 40 °C" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'rota_2': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Solvente Principal a Evaporar</label>
+                    <input type="text" id="param_solv_rota2" placeholder="Ej. DMF / Tolueno" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Temperatura del Baño (°C)</label>
+                    <input type="text" id="param_t_rota2" placeholder="Ej. 60 °C" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'reactor_premex': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Temperatura Máxima de Síntesis (°C)</label>
+                    <input type="text" id="param_t_reactor" placeholder="Ej. 180 °C" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Velocidad Agitación (RPM) / Atmósfera</label>
+                    <input type="text" id="param_rpm_reactor" placeholder="Ej. 400 RPM bajo purga de Argón" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'circ_poly': `
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Temperatura de Consigna (°C)</label>
+                    <input type="text" id="param_t_circ" placeholder="Ej. 80 °C Constante" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'hv_heinz': `
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Voltaje de Poling (kV DC)</label>
+                    <input type="text" id="param_kv_heinz" placeholder="Ej. 8 kV" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Corriente Máxima de Seguridad (mA)</label>
+                    <input type="text" id="param_ma_heinz" placeholder="Ej. 1 mA" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none">
+                </div>
+            `,
+            'piezo_ye': `
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-xs font-extrabold text-slate-600 uppercase mb-2">Modo de Evaluación (Berlincourt)</label>
+                    <input type="text" id="param_piezo" placeholder="Medida cuasiestática estándar d33" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none" disabled>
                 </div>
             `
         };
@@ -1078,6 +1275,13 @@
             updateUserUI();
             renderEquipmentGrid();
             document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModals(); });
+            
+            // Auto-actualizar el estado (puntos rojo/verde) cada minuto
+            setInterval(() => {
+                if (!document.getElementById('viewEquipmentCatalog').classList.contains('hidden')) {
+                    renderEquipmentGrid();
+                }
+            }, 60000);
         };
 
         function showToast(message, type = 'info') {
@@ -1148,6 +1352,18 @@
             showToast('Sesión cerrada');
         }
 
+        function getCurrentReservation(equipId) {
+            const now = new Date();
+            const nowStr = parseInt(formatDateISO(now).replace(/-/g, '') + String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0'));
+
+            return reservations.find(r => {
+                if(r.equipId !== equipId) return false;
+                const rStart = parseInt(r.dateStart.replace(/-/g, '') + r.timeStart.replace(':', ''));
+                const rEnd = parseInt(r.dateEnd.replace(/-/g, '') + r.timeEnd.replace(':', ''));
+                return nowStr >= rStart && nowStr < rEnd;
+            });
+        }
+
         function renderEquipmentGrid() {
             const container = document.getElementById('equipmentCategoriesContainer');
             container.innerHTML = '';
@@ -1189,7 +1405,14 @@
                                 <div style="animation-delay: ${(idx * 0.25) % 1.5}s" class="icon-float w-14 h-14 rounded-2xl ${cst.bgSoft} ${cst.text} flex items-center justify-center text-2xl shrink-0 shadow-md border ${cst.borderSoft}">
                                     ${eq.icon}
                                 </div>
-                                <span class="px-3 py-1 rounded-lg text-[10px] font-extrabold bg-slate-50 text-slate-600 uppercase tracking-widest border border-slate-200/80">${eq.brand}</span>
+                                <div class="flex flex-col items-end gap-1.5">
+                                    <span class="px-3 py-1 rounded-lg text-[10px] font-extrabold bg-slate-50 text-slate-600 uppercase tracking-widest border border-slate-200/80">${eq.brand}</span>
+                                    ${
+                                        getCurrentReservation(eq.id) 
+                                        ? `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-50 border border-red-200 text-[9px] font-extrabold text-red-700 uppercase tracking-widest shadow-sm"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_4px_rgba(239,68,68,0.8)]"></span> Ocupado hasta ${getCurrentReservation(eq.id).timeEnd}</div>`
+                                        : `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-[9px] font-extrabold text-emerald-700 uppercase tracking-widest shadow-sm"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Disponible</div>`
+                                    }
+                                </div>
                             </div>
                             
                             <h4 class="font-extrabold text-slate-900 text-lg leading-snug mb-2 group-hover:text-red-700 transition-colors">${eq.name}</h4>
@@ -1231,6 +1454,7 @@
         }
 
         function showEquipmentCatalogView() {
+            renderEquipmentGrid();
             document.getElementById('viewSingleCalendar').classList.add('hidden');
             document.getElementById('viewEquipmentCatalog').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1333,7 +1557,7 @@
         function openTechGuideModal() {
             closeModals();
             document.getElementById('techGuideTitle').innerText = 'Manual Científico y Guía Técnica de Instrumentación';
-            document.getElementById('techGuideSubtitle').innerText = 'Fundamentos físico-químicos, ecuaciones gobernantes, especificaciones operativas y normativas ISO / ASTM del PCG';
+            document.getElementById('techGuideSubtitle').innerText = 'Fundamentos físico-químicos, ecuaciones gobernantes, especificaciones operativas y normativas ISO / ASTM du PCG';
             document.getElementById('btnShowAllTechGuide').classList.add('hidden');
             renderTechGuideContent(null);
             document.getElementById('modalOverlay').classList.remove('hidden');
@@ -1474,6 +1698,9 @@
             
             document.getElementById('dynamicFormFields').innerHTML = FORM_FIELDS[eq.id] || DEFAULT_FORM;
             
+            document.getElementById('bookNotes').value = '';
+            document.getElementById('bookSamples').value = '';
+            
             closeModals();
             document.getElementById('modalOverlay').classList.remove('hidden');
             document.getElementById('bookingModal').classList.remove('hidden');
@@ -1498,7 +1725,8 @@
             reservations.push({
                 id: 'res_' + Date.now(), equipId, userName: currentUser.name, userPin: currentUser.pin,
                 dateStart: dStart, timeStart: tStart, dateEnd: dEnd, timeEnd: tEnd, params,
-                notes: document.getElementById('bookNotes').value
+                notes: document.getElementById('bookNotes').value,
+                samples: document.getElementById('bookSamples').value
             });
             localStorage.setItem('pcg_reservations', JSON.stringify(reservations));
             closeModals(); renderSingleEquipmentCalendar(); showToast('Reservado correctamente', 'success');
@@ -1518,6 +1746,7 @@
             document.getElementById('viewEnd').innerText = `${res.dateEnd} ${res.timeEnd}`;
             
             document.getElementById('viewParams').innerHTML = Object.entries(res.params).map(([k,v]) => `<div class="text-sm border-b border-slate-100 pb-2 last:border-0 last:pb-0"><b class="text-slate-900">${k}:</b> <span class="text-slate-600">${v}</span></div>`).join('');
+            document.getElementById('viewSamples').innerText = res.samples || 'No especificado';
             document.getElementById('viewNotes').innerText = res.notes || '--';
             
             const controls = document.getElementById('viewControls');
